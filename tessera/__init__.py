@@ -1,7 +1,5 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-
-import sqlalchemy as sa
 from tessera import config
 
 app = Flask(__name__)
