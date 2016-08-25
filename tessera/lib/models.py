@@ -31,10 +31,10 @@ class User(Base):
                                        lazy='dynamic')
     assigned_tickets = db.relationship('Ticket', backref='assignee', 
                                        lazy='dynamic',
-                                       primaryjoin = "ticket.assignee_id == user.id")
+                                       primaryjoin = "Ticket.assignee_id == User.id")
     reported_tickets  = db.relationship('Ticket', backref='reporter', 
                                        lazy='dynamic',
-                                       primaryjoin = "ticket.reporter_id == user.id")
+                                       primaryjoin = "Ticket.reporter_id == User.id")
 
     teams    = association_proxy('membership', 'team')
     projects = association_proxy('membership', 'project')
@@ -43,7 +43,7 @@ class User(Base):
         self.full_name = full_name
         self.username  = username
         self.email     = email
-        self.set_password(password)
+        self.password  = generate_password_hash(password)
 
     def set_password(pw):
         self.password = generate_password_hash(pw)
@@ -52,7 +52,7 @@ class User(Base):
         return check_password_hash(self.password, pw)
 
     def __repr__(self):
-        return "<User %r>" % (self.name)
+        return "<User %r>" % (self.username)
 
 class Ticket(Base):
     """Ticket represents a project's ticket."""
@@ -86,7 +86,7 @@ class Project(Base):
     members = db.relationship('Membership', backref='project', lazy='dynamic')
 
     def __init__(self, pkey, name, repo='', homepage=''):
-        self.pkey     = pkey
+        self.pkey     = pkey.upper()
         self.name     = name
         self.repo     = repo
         self.homepage = homepage
@@ -109,6 +109,10 @@ class Team(Base):
         self.name     = name
         self.url_stub = name.lower().replace(" ", "-")
         icon          = icon
+
+    def set_name(self, name):
+        self.name = name
+        self.url_stub = name.lower().replace(" ", "-")
 
     def __repr__(self):
         return "<Team %r>" % (self.name)
