@@ -11,8 +11,14 @@ class Base(db.Model):
 
     id         = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
-    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(),
-                                        onupdate=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), 
+                           onupdate=db.func.current_timestamp())
+
+    def serialize(self):
+        """This drops the internal sqlalchemy field which won't JSONify"""
+        s = self.__dict__
+        s.pop('_sa_instance_state', None)
+        return s
 
 class User(Base):
     """User represents a user of our application."""
@@ -43,16 +49,23 @@ class User(Base):
         self.full_name = full_name
         self.username  = username
         self.email     = email
-        self.password  = generate_password_hash(password)
+        self.set_password(password)
 
-    def set_password(pw):
+    def set_password(self, pw):
         self.password = generate_password_hash(pw)
 
-    def check_password(pw):
+    def check_password(self, pw):
         return check_password_hash(self.password, pw)
+
+    def serialize(self):
+        """Extends base class serialize to drop password as well."""
+        s = super().serialize()
+        s.pop('password', None)
+        return s
 
     def __repr__(self):
         return "<User %r>" % (self.username)
+
 
 class Ticket(Base):
     """Ticket represents a project's ticket."""
