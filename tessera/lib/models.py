@@ -1,4 +1,5 @@
 from tessera import db
+from sqlalchemy.ext.associationproxy import association_proxy
 from werkzeug import check_password_hash, generate_password_hash
 
 class Base(db.Model):
@@ -6,7 +7,6 @@ class Base(db.Model):
     
     It defines the id, created_at, and updated_at fields for all models.
     """
-
     __abstract__ = True
 
     id         = db.Column(db.Integer, primary_key=True)
@@ -16,12 +16,28 @@ class Base(db.Model):
 
 class User(Base):
     """User represents a user of our application."""
-
     full_name = db.Column(db.String(250), nullable=False)
     email     = db.Column(db.String(128),  nullable=False, unique=True)
 
     username  = db.Column(db.String(128),  nullable=False, unique=True)
     password  = db.Column(db.String(192),  nullable=False)
+
+
+    projects_lead_of = db.relationship('Project', backref='project_lead', 
+                                       lazy='dynamic')
+    teams_lead_of    = db.relationship('Team', backref='project_lead', 
+                                       lazy='dynamic')
+    memberships      = db.relationship('Membership', backref='user', 
+                                       lazy='dynamic')
+    assigned_tickets = db.relationship('Ticket', backref='assignee', 
+                                       lazy='dynamic',
+                                       primaryjoin = "ticket.assignee_id == user.id")
+    reported_tickets  = db.relationship('Ticket', backref='reporter', 
+                                       lazy='dynamic',
+                                       primaryjoin = "ticket.reporter_id == user.id")
+
+    teams    = association_proxy('membership', 'team')
+    projects = association_proxy('membership', 'project')
 
     def __init__(self, username, email, password, full_name):
         self.full_name = full_name
@@ -40,10 +56,13 @@ class User(Base):
 
 class Ticket(Base):
     """Ticket represents a project's ticket."""
-
     ticket_key  = db.Column(db.String(100), nullable=False, unique=True) # I mean jesus christ how many digits
     summary     = db.Column(db.String(250), nullable=False)
     description = db.Column(db.Text())
+
+    assignee_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    reporter_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    project_id  = db.Column(db.Integer, db.ForeignKey('project.id'))
 
     def __init__(self, ticket_key, summary, description):
         self.ticket_key  = ticket_key
@@ -59,7 +78,9 @@ class Project(Base):
     name     = db.Column(db.String(250), nullable=False)
     repo     = db.Column(db.String(250))
     homepage = db.Column(db.String(250))
-    team_id  = db.Column(db.Integer, db.foreignkey('team.id'))
+
+    project_lead_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    team_id         = db.Column(db.Integer, db.ForeignKey('team.id'))
 
     tickets = db.relationship('Ticket', backref='project', lazy='dynamic')
     members = db.relationship('Membership', backref='project', lazy='dynamic')
@@ -79,7 +100,10 @@ class Team(Base):
     url_stub = db.Column(db.String(150), nullable=False, unique=True)
     icon     = db.Column(db.String(150))    
 
+    team_lead_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
     projects = db.relationship('Project', backref='team', lazy='dynamic')
+    members  = db.relationship('Membership', backref='team', lazy='dynamic')
     
     def __init__(self, name, icon=""):
         self.name     = name
@@ -101,9 +125,9 @@ class Membership(Base):
     1 = Contributor
     2 = Administrator
     """
-    team_id     = db.Column(db.Integer, db.foreignkey('team.id'))
-    project_id  = db.Column(db.Integer, db.foreignkey('project.id'))
-    user_id     = db.Column(db.Integer, db.foreignkey('user.id'))
+    team_id     = db.Column(db.Integer, db.ForeignKey('team.id'))
+    project_id  = db.Column(db.Integer, db.ForeignKey('project.id'))
+    user_id     = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     permission_level = db.Column(db.Integer)
 
