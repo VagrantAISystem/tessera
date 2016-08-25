@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from tessera.lib.models import *
 
 import config
 
@@ -15,7 +14,8 @@ def not_found(error):
     return "This is not the JSON you were looking for. *FORCE SOUNDS*"
 
 # Register blueprints
-from tessera.api import bp
-app.register_blueprints(bp)
+from tessera.api import API
+app.register_blueprint(API)
 
+import tessera.lib.models
 db.create_all()
