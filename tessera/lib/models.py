@@ -39,7 +39,7 @@ class User(Base):
         return "<User %r>" % (self.name)
 
 class Ticket(Base):
-    """Ticket represents a project's ticket."""
+    """A ticket is a unit of work for a project, be it a bug or support ticket."""
 
     ticket_key  = db.Column(db.String(100), nullable=False, unique=True) # I mean jesus christ how many digits
     summary     = db.Column(db.String(250), nullable=False)
