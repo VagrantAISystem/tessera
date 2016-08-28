@@ -1,17 +1,16 @@
 import config
 import jwt
+import datetime as dt
 
 from functools import wraps
 from flask import g
-from jwt import ExpiredSignature, DecodeError
-from datetime import utcnow, timedelta
 
 
 def create_token(sub):
     payload = {
         'sub': sub,
-        'iat': utcnow(),
-        'exp': utcnow() + timedelta(days=1)
+        'iat': dt.utcnow(),
+        'exp': dt.utcnow() + dt.timedelta(days=1)
     }
 
     token = jwt.encode(payload, config.SECRET_KEY, algorithm='HS256')
@@ -31,11 +30,11 @@ def auth_required(f):
 
         try:
             payload = parse_token(request)
-        except DecodeError:
+        except jwt.DecodeError:
             response = jsonify(message='Token is invalid.')
             response.status_code = 401
             return response
-        except ExpiredSignature:
+        except jwt.ExpiredSignature:
             response = jsonify(message='Token has expired.')
             response.status_code = 401
             return response
