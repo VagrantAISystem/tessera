@@ -51,6 +51,15 @@ class User(Base):
         self.email     = email
         self.set_password(password)
 
+    def get_by_username_or_id(param):
+        try:
+            i = int(param)
+            u = User.query.filter(User.id == i).first()
+            return u
+        except:
+            u = User.query.filter_by(username=param).first()
+            return u
+
     def set_password(self, pw):
         self.password = generate_password_hash(pw)
 
