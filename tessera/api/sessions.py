@@ -6,7 +6,7 @@ from tessera.api import API
 from tessera import cache, app
 
 @API.route("/sessions", methods=["POST"])
-def create():
+def session_create():
     ujson = request.get_json()
 
     u = User.query.filter_by(username=ujson.get("username", "")).first()
@@ -27,7 +27,7 @@ def create():
  
 @API.route("/sessions/<user_id>", methods=["DELETE"])
 @tk.auth_required
-def destroy(user_id):
+def session_destroy(user_id):
     if g.user_id == int(user_id):
         cache.delete(user_id)
         return jsonify(message="Session successfully removed.")
