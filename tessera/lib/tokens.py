@@ -49,3 +49,29 @@ def auth_required(f):
         return f(*args, **kwargs)
 
     return decorated_function
+
+def admin_required(f):
+    """admin_required will make sure the user has admin privilegeds before
+    executing the decorated function. It MUST follow an auth_required decorator
+    or else it will fail."""
+    @wraps(f)
+    @auth_required
+    def decorated_function(*args, **kwargs):
+        # Are you logged in?
+        if g.user_id == None:
+            response = jsonify(message='You are not logged in.')
+            response.status_code = 401
+            return response
+
+        # Are you an admin?
+        u = User.filter(User.id == g.user_id).first()
+        if not u.is_admin:
+            response = jsonify(message='You are not an Administrator.')
+            response.status_code = 403
+            return response
+
+        # Else user is an admin and logged in so just execute.
+        return f(*args, **kwargs)
+
+    return decorated_function
+
