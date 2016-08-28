@@ -45,7 +45,7 @@ class User(Base):
     teams    = association_proxy('membership', 'team')
     projects = association_proxy('membership', 'project')
 
-    def __init__(self, username, email, password, full_name):
+    def __init__(self, *, username, email, password, full_name):
         self.full_name = full_name
         self.username  = username
         self.email     = email
