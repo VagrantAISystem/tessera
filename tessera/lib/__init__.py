@@ -18,3 +18,8 @@ def requires_login(f):
             return err
         return f(*args, **kwargs)
     return decorated_function
+
+class AppError(Exception):
+    def __init__(self, *, status_code, message):
+        self.message = message
+        self.code = status_code
