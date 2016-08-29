@@ -21,8 +21,7 @@ except:
     # If redis isn't set up default to a simple in memory cache.
     # This is bad for performance but makes testing and development a little
     # easier
-    app.logger.info("""Failed to connect to redis, falling back to in memory
-                       cache this is not recommended. Please setup a redis DB.""")
+    app.logger.warning("Falling back to in memory cache this is not recommended. Please setup a redis DB.")
     from werkzeug.contrib.cache import SimpleCache
     cache = SimpleCache()
 
@@ -32,7 +31,7 @@ db = SQLAlchemy(app)
 # Register error handlers
 import tessera.errors
 
-import tessera.lib.models
+from tessera.v1.models import *
 db.create_all()
 
 # Register blueprints
