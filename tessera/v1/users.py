@@ -1,38 +1,36 @@
 from sqlite3 import IntegrityError
 from tessera import cache, db, app
-from tessera.lib.models import User
+from tessera.v1.models import User
 from tessera.lib.tokens import create_token, auth_required, admin_required
 from flask import jsonify, request, g
-from tessera.api import API
+from tessera.v1 import v1
 
-@API.route("/users", methods=["GET"])
-@auth_required
+@v1.route("/users", methods=["GET"])
 @admin_required
 def user_index():
-    users = [ u.serialize() for u in User.query.all() ]
-    print(users)
+    users = [ u.to_json() for u in User.query.all() ]
     return jsonify(users)
 
-@API.route("/users", methods=["POST"])
+@v1.route("/users", methods=["POST"])
 def user_create():
     ujson = request.get_json()
-    u = User(username=ujson.get("username", ""),
-             password=ujson.get("password", ""),
-             full_name=ujson.get("full_name", ""),
-             email=ujson.get("email", "")) 
-    db.session.add(u)
-    try:
-        db.session.commit()
-        ujson = u.serialize()
-        ujson["token"] = create_token(u.id)
-        return jsonify(ujson)
-    except IntegrityError as ie:
-        app.logger.error(str(ie))
-        r = jsonify(message="That username is already taken.")
-        r.status_code = 409
+    u = User.from_json(ujson)
+    u.save(db)
+    ujson = u.to_json()
+    # ujson["token"] = create_token(u.id)
+    return jsonify(ujson)
+
+@v1.route("/users/<username>", methods=["GET"])
+@auth_required
+def user_get(username):
+    u = User.get_by_username_or_id(username)
+    return jsonify(u.to_json())
+
+@v1.route("/users/<username>", methods=["PUT", "UPDATE"])
+def user_update(username):
+    if g.user.id != u.id or not g.user.is_admin:
+        r = jsonify(message="Access denied.")
+        r.status_code = 403
         return r
-    except Exception as e:
-        r = jsonify(message="Unexpected error.")
-        app.logger.error(str(e))
-        r.status_code = 500
-        return r
+    ujson = request.get_json()
+
