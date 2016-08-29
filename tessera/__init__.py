@@ -29,17 +29,15 @@ except:
 # Create the database
 db = SQLAlchemy(app)
 
+# Register error handlers
+import tessera.errors
+
 import tessera.lib.models
 db.create_all()
 
 # Register blueprints
-from tessera.api import API
-app.register_blueprint(API)
-
-# Error handlers
-@app.errorhandler(404)
-def not_found(error):
-    return jsonify(message="This is not the JSON you're looking for. *FORCE SOUNDS*")
+from tessera.v1 import v1
+app.register_blueprint(v1)
 
 # DEBUG purposes TODO: Remove
 for rule in app.url_map.iter_rules():
