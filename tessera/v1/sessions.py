@@ -1,11 +1,11 @@
 import tessera.lib.tokens as tk
 
-from tessera.lib.models import User
+from tessera.v1.models import User
 from flask import jsonify, g, request
-from tessera.api import API
+from tessera.v1 import v1
 from tessera import cache, app
 
-@API.route("/sessions", methods=["POST"])
+@v1.route("/sessions", methods=["POST"])
 def session_create():
     ujson = request.get_json()
 
@@ -25,7 +25,7 @@ def session_create():
     r.status_code = 401
     return r
  
-@API.route("/sessions/<user_id>", methods=["DELETE"])
+@v1.route("/sessions/<user_id>", methods=["DELETE"])
 @tk.auth_required
 def session_destroy(user_id):
     if g.user_id == int(user_id):
