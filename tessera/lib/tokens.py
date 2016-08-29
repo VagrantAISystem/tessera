@@ -45,7 +45,7 @@ def auth_required(f):
             app.logger.info(e)
             return response
 
-        g.user_id = payload['sub']
+        g.user = User.from_json(cache.get(payload['sub']))
         return f(*args, **kwargs)
 
     return decorated_function
