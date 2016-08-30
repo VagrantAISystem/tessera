@@ -23,6 +23,8 @@ def validation_error(error):
     r.status_code = 400
     return r
 
+# AppError is a custom error type for our app that lets us convey status code
+# and message easily.
 @app.errorhandler(AppError)
 def app_error(e):
     r = jsonify(message=e.message)
