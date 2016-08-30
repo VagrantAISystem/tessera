@@ -1,5 +1,4 @@
-from sqlite3 import IntegrityError
-from tessera import cache, db, app
+from tessera import cache, app
 from tessera.v1.models import User
 from tessera.lib.tokens import create_token, auth_required, admin_required
 from flask import jsonify, request, g
@@ -15,10 +14,9 @@ def user_index():
 def user_create():
     ujson = request.get_json()
     u = User.from_json(ujson)
-    u.save(db)
-    ujson = u.to_json()
+    u.save()
     # ujson["token"] = create_token(u.id)
-    return jsonify(ujson)
+    return jsonify(u.to_json())
 
 @v1.route("/users/<username>", methods=["GET"])
 @auth_required
@@ -33,4 +31,6 @@ def user_update(username):
         r.status_code = 403
         return r
     ujson = request.get_json()
-
+    u = User.query.filter_by(username=username).first() 
+    u.update(u)
+    u.save()
