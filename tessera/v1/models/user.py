@@ -63,11 +63,19 @@ class User(Base):
 
     def save(self, d):
         try:
-            d.session.add(self)
-            d.session.commit()
+            db.session.add(self)
+            db.session.commit()
         except IntegrityError:
             raise AppError(status_code=409, 
                            message="That username is already taken.")
+
+    def update(self, json):
+        self.username = json.get("username", self.username) 
+        self.full_name = json.get("fullName", self.full_name) 
+        self.email = json.get("email", self.email) 
+
+        if json.get("password", None) != None:
+            self.set_password(json["password"])
 
     def set_password(self, pw):
         self.password = generate_password_hash(pw)
