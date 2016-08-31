@@ -4,15 +4,27 @@ from tessera.lib import AppError
 from flask import jsonify, g
 from tessera.v1 import v1
 
-@v1.route("/<string:team>/projects", methods=["GET"])
-def project_index(team):
-    t = Team.query.filter_by(url_stub=team).first()
-    return jsonify([ p.to_json() for p in t.projects.all() ])
+@v1.route("/projects", methods=["GET"])
+def project_index_all():
+    return jsonify([ p.to_json() for p in Project.query.all() ])
 
-@v1.route("/<string:team>/<string:pkey>", methods=["GET"])
-def project_get(team, pkey):
-    t = Team.get_by_name_or_stub(team)
-    p = t.projects.filter_by(pkey=pkey).first()
+@v1.route("/<string:team_slug>/projects", methods=["GET"])
+def project_index(team_slug):
+    t = Team.query.\
+            join(Team.projects).\
+            filter(Team.url_slug == team_slug).\
+            first()
+    if t == None:
+        raise AppError(status_code=404, message="Team not found.")
+    return jsonify([ p.to_json() for p in t.projects ])
+
+@v1.route("/<string:team_slug>/<string:pkey>", methods=["GET"])
+def project_get(team_slug, pkey):
+    p = Project.query.\
+            join(Project.team).\
+            filter(Team.url_slug == team_slug).\
+            filter(Project.pkey == pkey).\
+            first()
     if p == None:
         raise AppError(status_code=404,
                        message="That project does not exist.")
@@ -20,5 +32,5 @@ def project_get(team, pkey):
 
 @v1.route("/<string:team>/<string:pkey>/members", methods=["GET"])
 def project_members_index(team, pkey):
-    t = Team.query.filter_by(url_stub=team).first()
+    t = Team.query.filter_by(url_slug=team).first()
 
