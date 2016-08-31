@@ -14,7 +14,7 @@ class Project(Base):
     tickets = db.relationship('Ticket', backref='project', lazy='dynamic')
     members = db.relationship('Membership', backref='project', lazy='dynamic')
 
-    def __init__(self, pkey, name, repo='', homepage=''):
+    def __init__(self, *, pkey, name, repo='', homepage=''):
         self.pkey     = pkey.upper()
         self.name     = name
         self.repo     = repo
