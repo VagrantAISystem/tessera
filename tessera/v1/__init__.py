@@ -6,3 +6,4 @@ import tessera.v1.users
 import tessera.v1.sessions
 import tessera.v1.teams
 import tessera.v1.projects
+import tessera.v1.tickets
