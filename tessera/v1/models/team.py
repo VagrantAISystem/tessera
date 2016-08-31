@@ -22,7 +22,7 @@ class Team(Base):
     def __init__(self, *, name, icon=""):
         self.name     = name
         self.url_slug = name.lower().replace(" ", "-")
-        icon          = icon
+        self.icon          = icon
 
     def set_name(self, name):
         self.name = name
