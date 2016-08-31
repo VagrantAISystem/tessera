@@ -1,10 +1,16 @@
 from tessera import db
-from tessera.lib.models import *
+from tessera.v1.models import *
 
 db.create_all()
 
-testadmin = User("testadmin", "test@example.com", "test", "Test Testerson II")
-test = User("test", "test1@example.com", "test", "Test Testerson")
+testadmin = User(username="testadmin", 
+                 email="test@example.com", 
+                 password="test", 
+                 full_name="Test Testerson II")
+test = User(username="test", 
+            email="test1@example.com", 
+            password="test", 
+            full_name="Test Testerson")
 db.session.add(testadmin)
 db.session.add(test)
 db.session.commit()
