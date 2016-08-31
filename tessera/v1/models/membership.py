@@ -19,7 +19,7 @@ class Membership(Base):
     permission_level = db.Column(db.Integer)
 
     def __init__(self, perm):
-        permission_level = perm
+        self.permission_level = perm
 
     def __repr__(self):
         return "<Membership %r %r %r %r>"  % (self.team_id, self.project_id,

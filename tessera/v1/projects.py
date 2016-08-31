@@ -30,7 +30,15 @@ def project_get(team_slug, pkey):
                        message="That project does not exist.")
     return jsonify( p.to_json() )
 
-@v1.route("/<string:team>/<string:pkey>/members", methods=["GET"])
-def project_members_index(team, pkey):
-    t = Team.query.filter_by(url_slug=team).first()
-
+@v1.route("/<string:team_slug>/<string:pkey>/members", methods=["GET"])
+def project_members_index(team_slug, pkey):
+    m = Membership.query.\
+            join(Membership.project).\
+            join(Membership.user).\
+            join(Project.team).\
+            filter(Team.url_slug == url_slug).\
+            filter(Project.pkey == pkey).\
+            all()
+    if m == None:
+        raise AppError(status_code=404, message="Project or team not found.")
+    return m

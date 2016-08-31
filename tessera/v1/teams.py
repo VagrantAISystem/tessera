@@ -16,3 +16,4 @@ def team_create():
 def team_get(team_slug):
     t = Team.query.filter_by(url_slug=team_slug).first()
     return jsonify( t.to_json() )
+

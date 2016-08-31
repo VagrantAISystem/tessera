@@ -37,6 +37,23 @@ class Team(Base):
         t.team_lead = lead
         return t
 
+    def get_by_name_or_stub(name):
+        t = Team.query.filter(or_(Team.name == name, 
+                                  Team.url_stub == name)).first()
+        if t == None:
+            raise AppError(status_code=404,
+                           message="That team does not exist")
+        return t
+
+    def from_json(json):
+        validate(json, team_schema)
+        t = Team(name=json["name"],
+                 icone=json.get("icon", ""))
+        un = json.get("project_lead",{}).get("username", "")
+        lead =  User.query.filter_by(username=un).first()
+        t.team_lead = lead
+        return t
+
     def __repr__(self):
         return "<Team %r>" % (self.name)
 
