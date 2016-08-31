@@ -11,7 +11,7 @@ class Team(Base):
     SOME_NAME.
     """
     name     = db.Column(db.String(120), nullable=False, unique=True)
-    url_stub = db.Column(db.String(150), nullable=False, unique=True)
+    url_slug = db.Column(db.String(150), nullable=False, unique=True)
     icon     = db.Column(db.String(150))    
 
     team_lead_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -21,20 +21,12 @@ class Team(Base):
     
     def __init__(self, *, name, icon=""):
         self.name     = name
-        self.url_stub = name.lower().replace(" ", "-")
+        self.url_slug = name.lower().replace(" ", "-")
         icon          = icon
 
     def set_name(self, name):
         self.name = name
-        self.url_stub = name.lower().replace(" ", "-")
-
-    def get_by_name_or_stub(name):
-        t = Team.query.filter(or_(Team.name == name, 
-                                  Team.url_stub == name)).first()
-        if t == None:
-            raise AppError(status_code=404,
-                           message="That team does not exist")
-        return t
+        self.url_slug = name.lower().replace(" ", "-")
 
     def from_json(json):
         validate(json, team_schema)
