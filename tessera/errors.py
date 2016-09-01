@@ -1,5 +1,6 @@
 from flask import jsonify
 from schema import SchemaError
+from sqlalchemy.exc import IntegrityError
 from tessera import app
 from tessera.lib import AppError
 
@@ -21,6 +22,12 @@ def ise(error):
 def validation_error(error):
     r = jsonify(message="Malformed JSON")
     r.status_code = 400
+    return r
+
+@app.errorhandler(IntegrityError)
+def duplication_error(error):
+    r = jsonify(message=error.orig)
+    r.status_code = 409
     return r
 
 # AppError is a custom error type for our app that lets us convey status code
