@@ -26,11 +26,12 @@ def user_get(username):
 
 @v1.route("/users/<username>", methods=["PUT", "UPDATE"])
 def user_update(username):
-    if g.user.id != u.id or not g.user.is_admin:
-        r = jsonify(message="Access denied.")
-        r.status_code = 403
-        return r
-    ujson = request.get_json()
-    u = User.query.filter_by(username=username).first() 
-    u.update(u)
-    u.save()
+    if g.user.id == u.id or not g.user.is_admin:
+        ujson = request.get_json()
+        u = User.query.filter_by(username=username).first() 
+        u.update(u)
+        save_model(u, "That username is already taken.")
+        return jsonify(message="User successfully updated.")
+
+    raise AppError(message="Access denied.", status_code = 403)
+    
