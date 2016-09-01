@@ -18,7 +18,7 @@ class User(Base):
 
     projects_lead_of = db.relationship('Project', backref='project_lead', 
                                        lazy='dynamic')
-    teams_lead_of    = db.relationship('Team', backref='project_lead', 
+    teams_lead_of    = db.relationship('Team', backref='team_lead', 
                                        lazy='dynamic')
     memberships      = db.relationship('Membership', backref='user', 
                                        lazy='dynamic')
@@ -57,18 +57,10 @@ class User(Base):
         return u
     
     def to_json(self):
-        """Extends base class serialize to drop password as well."""
+        """Extends base class to_json to drop password as well."""
         s = super().to_json()
         s.pop('password', None)
         return s
-
-    def save(self):
-        try:
-            db.session.add(self)
-            db.session.commit()
-        except IntegrityError:
-            raise AppError(status_code=409, 
-                           message="That username is already taken.")
 
     def update(self, json):
         self.username = json.get("username", self.username) 

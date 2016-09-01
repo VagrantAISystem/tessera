@@ -11,10 +11,16 @@ class Ticket(Base):
     reporter_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     project_id  = db.Column(db.Integer, db.ForeignKey('project.id'))
 
-    def __init__(self, *, ticket_key, summary, description):
+    def __init__(self, *, ticket_key, 
+                          summary, 
+                          description, 
+                          assignee_id=None,
+                          reporter_id=None):
         self.ticket_key  = ticket_key
         self.summary     = summary
         self.description = description
+        self.assignee_id = assignee_id
+        self.reporter_id = reporter_id
 
     def __repr__(self):
         return "<Ticket %r>" % (self.ticket_key)

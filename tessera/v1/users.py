@@ -26,16 +26,12 @@ def user_get(username):
 @v1.route("/users/<username>", methods=["PUT"])
 @auth_required
 def user_update(username):
-    if g.user.id != u.id or not g.user.is_admin:
-        raise AppError(message="You do not have permission to update that user.", 
-                       status_code = 403)
-    ujson = request.get_json()
-    u = User.query.filter_by(username=username).first() 
-    if u == None:
-        raise AppError(message="User not found.",
-                       status_code=404)
-    u.update(u)
-    u.save()
-    return jsonify(message="User successfully updated.")
+    if g.user.id == u.id or not g.user.is_admin:
+        ujson = request.get_json()
+        u = User.query.filter_by(username=username).first() 
+        u.update(u)
+        save_model(u, "That username is already taken.")
+        return jsonify(message="User successfully updated.")
 
-# TODO: Write a delete route for users.
+    raise AppError(message="Access denied.", status_code = 403)
+    
