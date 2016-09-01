@@ -11,7 +11,6 @@ class Base(db.Model):
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), 
                            onupdate=db.func.current_timestamp())
-
     def to_json(self):
         """This drops the internal sqlalchemy field which won't JSONify"""
         s = self.__dict__
