@@ -21,6 +21,18 @@ class Membership(Base):
     def __init__(self, perm):
         self.permission_level = perm
 
+    def get_project_memberships(team_slug, pkey):
+        m = Membership.query.\
+                join(Membership.project).\
+                join(Membership.user).\
+                join(Project.team).\
+                filter(Team.url_slug == url_slug).\
+                filter(Project.pkey == pkey).\
+                all()
+        if m == None:
+            raise AppError(status_code=404, message="Project or team not found.")
+        return m
+
     def __repr__(self):
         return "<Membership %r %r %r %r>"  % (self.team_id, self.project_id,
                                               self.user_id,
