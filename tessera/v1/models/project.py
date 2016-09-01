@@ -20,6 +20,18 @@ class Project(Base):
         self.repo     = repo
         self.homepage = homepage
 
+    def get_by_key(team_slug, pkey):
+        p = Project.query.\
+                join(Project.team).\
+                filter(Team.url_slug == team_slug).\
+                filter(Project.pkey == pkey).\
+                first()
+        if p == None:
+            raise AppError(status_code=404,
+                           message="That project does not exist.")
+        return p
+
+
     def __repr__(self):
         return "<Project %r>" % (self.pkey)
 
