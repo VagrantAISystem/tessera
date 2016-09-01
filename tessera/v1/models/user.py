@@ -42,10 +42,11 @@ class User(Base):
         try:
             i = int(param)
             u = User.query.filter(User.id == i).first()
-            return u
         except:
             u = User.query.filter_by(username=param).first()
-            return u
+        if u == None:
+            raise AppError(status_code=404, message="User not found.")
+        return u
 
     def from_json(json):
         validate(json, user_schema)
@@ -61,7 +62,7 @@ class User(Base):
         s.pop('password', None)
         return s
 
-    def save(self, d):
+    def save(self):
         try:
             db.session.add(self)
             db.session.commit()

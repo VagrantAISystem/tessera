@@ -17,11 +17,12 @@ app.logger.addHandler(fh)
 try:
     cache = RedisCache(host=config.REDIS_HOST, port=config.REDIS_PORT, 
                        password=None,db=0, default_timeout=300, key_prefix=None)
-except:
+except Exception as e:
     # If redis isn't set up default to a simple in memory cache.
     # This is bad for performance but makes testing and development a little
     # easier
     app.logger.warning("Falling back to in memory cache this is not recommended. Please setup a redis DB.")
+    app.logger.warning(str(e))
     from werkzeug.contrib.cache import SimpleCache
     cache = SimpleCache()
 

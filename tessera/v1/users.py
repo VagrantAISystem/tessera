@@ -15,8 +15,7 @@ def user_create():
     ujson = request.get_json()
     u = User.from_json(ujson)
     u.save()
-    # ujson["token"] = create_token(u.id)
-    return jsonify(u.to_json())
+    return jsonify(message="User succesfully created.")
 
 @v1.route("/users/<username>", methods=["GET"])
 @auth_required
@@ -24,13 +23,19 @@ def user_get(username):
     u = User.get_by_username_or_id(username)
     return jsonify(u.to_json())
 
-@v1.route("/users/<username>", methods=["PUT", "UPDATE"])
+@v1.route("/users/<username>", methods=["PUT"])
+@auth_required
 def user_update(username):
     if g.user.id != u.id or not g.user.is_admin:
-        r = jsonify(message="Access denied.")
-        r.status_code = 403
-        return r
+        raise AppError(message="You do not have permission to update that user.", 
+                       status_code = 403)
     ujson = request.get_json()
     u = User.query.filter_by(username=username).first() 
+    if u == None:
+        raise AppError(message="User not found.",
+                       status_code=404)
     u.update(u)
     u.save()
+    return jsonify(message="User successfully updated.")
+
+# TODO: Write a delete route for users.

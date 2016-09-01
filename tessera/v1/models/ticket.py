@@ -11,7 +11,7 @@ class Ticket(Base):
     reporter_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     project_id  = db.Column(db.Integer, db.ForeignKey('project.id'))
 
-    def __init__(self, ticket_key, summary, description):
+    def __init__(self, *, ticket_key, summary, description):
         self.ticket_key  = ticket_key
         self.summary     = summary
         self.description = description

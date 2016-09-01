@@ -15,7 +15,7 @@ db.session.add(testadmin)
 db.session.add(test)
 db.session.commit()
 
-a_team = Team("The A Team")
+a_team = Team(name="The A Team")
 a_team.team_lead = test
 db.session.add(a_team)
 db.session.commit()
