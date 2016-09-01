@@ -20,9 +20,13 @@ def project_index(team_slug):
         raise AppError(status_code=404, message="Team not found.")
     return jsonify([ p.to_json() for p in t.projects ])
 
+@v1.route("/<string:team_slug>/projects", methods=["POST"])
+def project_create(team_slug):
+    return jsonify(message="not implemented")
+
 @v1.route("/<string:team_slug>/<string:pkey>", methods=["GET"])
 def project_get(team_slug, pkey):
-    p = Project.get_by_key(team_slug, pkey)
+    p = Project.get_by_key(team_slug, pkey, request.args.get("preload", False))
     return jsonify( p.to_json() )
 
 @v1.route("/<string:team_slug>/<string:pkey>", methods=["PUT"])
