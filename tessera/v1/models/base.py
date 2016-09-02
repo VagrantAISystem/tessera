@@ -15,4 +15,10 @@ class Base(db.Model):
         """This drops the internal sqlalchemy field which won't JSONify"""
         s = self.__dict__
         s.pop('_sa_instance_state', None)
+        s.pop('id', None)
+        s['updatedDate'] = s.pop('updated_at')
+        s['createdDate'] = s.pop('created_at')
+        for key, value in s.items():
+            if isinstance(value, Base):
+                s[key] = value.to_json()
         return s

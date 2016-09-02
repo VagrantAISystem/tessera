@@ -16,26 +16,27 @@ class User(Base):
     password  = db.Column(db.String(192),  nullable=False)
 
 
-    projects_lead_of = db.relationship('Project', backref='project_lead', 
+    projects_lead_of = db.relationship('Project', backref='project_lead',
                                        lazy='dynamic')
-    teams_lead_of    = db.relationship('Team', backref='team_lead', 
+    teams_lead_of    = db.relationship('Team', backref='team_lead',
                                        lazy='dynamic')
-    memberships      = db.relationship('Membership', backref='user', 
+    memberships      = db.relationship('Membership', backref='user',
                                        lazy='dynamic')
-    assigned_tickets = db.relationship('Ticket', backref='assignee', 
+    assigned_tickets = db.relationship('Ticket', backref='assignee',
                                        lazy='dynamic',
-                                       primaryjoin = "Ticket.assignee_id == User.id")
-    reported_tickets  = db.relationship('Ticket', backref='reporter', 
+                                       primaryjoin = 'Ticket.assignee_id == User.id')
+    reported_tickets  = db.relationship('Ticket', backref='reporter',
                                        lazy='dynamic',
-                                       primaryjoin = "Ticket.reporter_id == User.id")
+                                       primaryjoin = 'Ticket.reporter_id == User.id')
 
     teams    = association_proxy('membership', 'team')
     projects = association_proxy('membership', 'project')
 
-    def __init__(self, *, username, email, password, full_name):
+    def __init__(self, *, username, email, password, full_name, is_admin=False):
         self.full_name = full_name
         self.username  = username
         self.email     = email
+        self.is_admin  = is_admin
         self.set_password(password)
 
     def get_by_username_or_id(param):
@@ -45,48 +46,52 @@ class User(Base):
         except:
             u = User.query.filter_by(username=param).first()
         if u == None:
-            raise AppError(status_code=404, message="User not found.")
+            raise AppError(status_code=404, message='User not found.')
         return u
 
     def from_json(json):
         validate(json, user_schema)
-        u = User(username=json["username"],
-                 password=json["password"],
-                 full_name=json["fullName"],
-                 email=json["email"]) 
+        u = User(username=json['username'],
+                 password=json['password'],
+                 full_name=json['fullName'],
+                 email=json['email'])
         return u
-    
+
     def to_json(self):
         """Extends base class to_json to drop password as well."""
         s = super().to_json()
         s.pop('password', None)
+        s.pop('is_admin', None)
+        s.pop('updatedDate', None)
+        s.pop('createdDate', None)
+        s['fullName'] = s.pop('full_name')
         return s
 
     def update(self, json):
-        self.username = json.get("username", self.username) 
-        self.full_name = json.get("fullName", self.full_name) 
-        self.email = json.get("email", self.email) 
+        self.username = json.get('username', self.username)
+        self.full_name = json.get('fullName', self.full_name)
+        self.email = json.get('email', self.email)
 
-        if json.get("password", None) != None:
-            self.set_password(json["password"])
+        if json.get('password', None) != None:
+            self.set_password(json['password'])
 
     def set_password(self, pw):
         self.password = generate_password_hash(pw)
 
     def check_password(self, pw):
         return check_password_hash(self.password, pw)
-        
+
     def __repr__(self):
-        return "<User %r>" % (self.username)
+        return '<User %r>' % (self.username)
 
 user_schema = {
-    "type": "object",
-    "properties": {  
-        "password": { "type": "string" },
-        "username": { "type": "string" },
-        "email": { "type": "string" },
-        "fullName": { "type": "string" },
-        "is_admin": { "type": "boolean" },
+    'type': 'object',
+    'properties': {
+        'password': { 'type': 'string' },
+        'username': { 'type': 'string' },
+        'email': { 'type': 'string' },
+        'fullName': { 'type': 'string' },
+        'is_admin': { 'type': 'boolean' },
     },
-    "required": ["fullName", "email", "username", "password"],
+    'required': ['fullName', 'email', 'username', 'password'],
 }

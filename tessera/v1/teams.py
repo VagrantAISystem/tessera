@@ -14,6 +14,6 @@ def team_create():
 
 @v1.route("/<string:team_slug>", methods=["GET"])
 def team_get(team_slug):
-    t = Team.query.filter_by(url_slug=team_slug).first()
+    t = Team.get_by_name_or_stub(team_slug)
     return jsonify( t.to_json() )
 

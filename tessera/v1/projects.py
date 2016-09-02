@@ -1,6 +1,6 @@
 from tessera import app
 from tessera.lib.tokens import auth_required
-from tessera.v1.models import Team
+from tessera.v1.models import Team, Project
 from tessera.lib import AppError
 from flask import jsonify, g, request
 from tessera.v1 import v1
@@ -38,12 +38,10 @@ def project_update(team_slug, pkey):
         db.session.add(p)
         db.session.commit()
         return jsonify(message="Project successfully updated.")
-    raise AppError(status_code=403, 
+    raise AppError(status_code=403,
                    message="You are not permitted to perform that action")
 
 @v1.route("/<string:team_slug>/<string:pkey>/members", methods=["GET"])
 def project_members_index(team_slug, pkey):
     m = Membership.get_project_memberships(team_slug, pkey)
     return m
-
-
