@@ -1,5 +1,6 @@
 from tessera import db
 from tessera.v1.models.base import Base
+from sqlalchemy.orm import joinedload
 from tessera.v1.models.team import Team
 
 
@@ -24,15 +25,32 @@ class Project(Base):
 
     def get_by_key(team_slug, pkey, preload=False):
         p = Project.query.\
+                options(joinedload(Project.project_lead)).\
                 join(Project.team).\
                 filter(Team.url_slug == team_slug).\
                 filter(Project.pkey == pkey).\
                 first()
         if p == None:
-            raise AppError(status_code=404,
-                           message="That project does not exist.")
+            raise AppError(status_code=404, message="Project not found.")
         return p
 
+    def get_tickets(self):
+        p = Project.query.\
+                options(joinedload(Project.tickets)).\
+                join(Project.team).\
+                filter(Project.pkey == pkey).\
+                filter(Team.url_slug == team_slug).\
+                first()
+        if p == None:
+            raise AppError(status_code=404, message="Project not found.")
+        return p.tickets
+
+    def to_json(self):
+        s = super().to_json()
+        s.pop('project_lead_id', None)
+        s.pop('team_id', None)
+        s.pop('updatedDate', None)
+        return s
 
     def __repr__(self):
         return "<Project %r>" % (self.pkey)
