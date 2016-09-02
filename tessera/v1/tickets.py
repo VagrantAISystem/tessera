@@ -4,10 +4,10 @@ from tessera.v1.models import Ticket, Project, Team
 
 @v1.route("/tickets", methods=["GET"])
 def ticket_index_all():
-    return jsonify([ t.to_json() for t in Team.query.all() ])
+    return jsonify([ t.to_json() for t in Ticket.query.all() ])
 
 @v1.route("/<string:team_slug>/<string:pkey>/tickets", methods=["GET"])
-def ticket_index(team, pkey):
+def ticket_index(team_slug, pkey):
     p = Project.\
             query.\
             join(Project.team).\

@@ -1,5 +1,7 @@
 from tessera import db
 from tessera.v1.models.base import Base
+from tessera.v1.models.team import Team
+
 
 class Project(Base):
     """Project is a container for tickets."""
@@ -20,7 +22,7 @@ class Project(Base):
         self.repo     = repo
         self.homepage = homepage
 
-    def get_by_key(team_slug, pkey):
+    def get_by_key(team_slug, pkey, preload=False):
         p = Project.query.\
                 join(Project.team).\
                 filter(Team.url_slug == team_slug).\
@@ -34,5 +36,3 @@ class Project(Base):
 
     def __repr__(self):
         return "<Project %r>" % (self.pkey)
-
-

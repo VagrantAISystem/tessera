@@ -2,13 +2,14 @@ import sys
 from tessera import db
 from tessera.v1.models import *
 
-testadmin = User(username="testadmin", 
-                 email="test@example.com", 
-                 password="test", 
-                 full_name="Test Testerson II")
-test = User(username="test", 
-            email="test1@example.com", 
-            password="test", 
+testadmin = User(username="testadmin",
+                 email="test@example.com",
+                 password="test",
+                 full_name="Test Testerson II",
+                 is_admin=True)
+test = User(username="test",
+            email="test1@example.com",
+            password="test",
             full_name="Test Testerson")
 db.session.add(testadmin)
 db.session.add(test)
@@ -26,8 +27,10 @@ a_team.projects.append(testp)
 for i in range(100):
     t = Ticket(ticket_key=testp.pkey + "-" +
                str(Project.query.filter_by(pkey=testp.pkey).first().tickets.count() + 1),
-               summary="This is test ticket #" + str(i + 1), 
+               summary="This is test ticket #" + str(i + 1),
                description="This isn't helplful")
+    t.assignee = test
+    t.reporter = testadmin
 
     testp.tickets.append(t)
 

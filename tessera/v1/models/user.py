@@ -16,26 +16,27 @@ class User(Base):
     password  = db.Column(db.String(192),  nullable=False)
 
 
-    projects_lead_of = db.relationship('Project', backref='project_lead', 
+    projects_lead_of = db.relationship('Project', backref='project_lead',
                                        lazy='dynamic')
-    teams_lead_of    = db.relationship('Team', backref='team_lead', 
+    teams_lead_of    = db.relationship('Team', backref='team_lead',
                                        lazy='dynamic')
-    memberships      = db.relationship('Membership', backref='user', 
+    memberships      = db.relationship('Membership', backref='user',
                                        lazy='dynamic')
-    assigned_tickets = db.relationship('Ticket', backref='assignee', 
+    assigned_tickets = db.relationship('Ticket', backref='assignee',
                                        lazy='dynamic',
                                        primaryjoin = "Ticket.assignee_id == User.id")
-    reported_tickets  = db.relationship('Ticket', backref='reporter', 
+    reported_tickets  = db.relationship('Ticket', backref='reporter',
                                        lazy='dynamic',
                                        primaryjoin = "Ticket.reporter_id == User.id")
 
     teams    = association_proxy('membership', 'team')
     projects = association_proxy('membership', 'project')
 
-    def __init__(self, *, username, email, password, full_name):
+    def __init__(self, *, username, email, password, full_name, is_admin=False):
         self.full_name = full_name
         self.username  = username
         self.email     = email
+        self.is_admin  = is_admin
         self.set_password(password)
 
     def get_by_username_or_id(param):
@@ -53,9 +54,9 @@ class User(Base):
         u = User(username=json["username"],
                  password=json["password"],
                  full_name=json["fullName"],
-                 email=json["email"]) 
+                 email=json["email"])
         return u
-    
+
     def to_json(self):
         """Extends base class to_json to drop password as well."""
         s = super().to_json()
@@ -63,9 +64,9 @@ class User(Base):
         return s
 
     def update(self, json):
-        self.username = json.get("username", self.username) 
-        self.full_name = json.get("fullName", self.full_name) 
-        self.email = json.get("email", self.email) 
+        self.username = json.get("username", self.username)
+        self.full_name = json.get("fullName", self.full_name)
+        self.email = json.get("email", self.email)
 
         if json.get("password", None) != None:
             self.set_password(json["password"])
@@ -75,13 +76,13 @@ class User(Base):
 
     def check_password(self, pw):
         return check_password_hash(self.password, pw)
-        
+
     def __repr__(self):
         return "<User %r>" % (self.username)
 
 user_schema = {
     "type": "object",
-    "properties": {  
+    "properties": {
         "password": { "type": "string" },
         "username": { "type": "string" },
         "email": { "type": "string" },
