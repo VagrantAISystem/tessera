@@ -35,6 +35,13 @@ class Status(Base):
         self.name        = name
         self.status_type = status_type
 
+    def to_json(self):
+        s = super().to_json()
+        s.pop("createdDate", None)
+        s.pop("updatedDate", None)
+        s["statusType"] = s.pop("status_type")
+        return s
+
     def get_next(self):
         return self.next_statuses.all()
     
