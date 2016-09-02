@@ -8,24 +8,28 @@ def ticket_index_all():
 
 @v1.route("/<string:team_slug>/<string:pkey>/tickets", methods=["GET"])
 def ticket_index(team_slug, pkey):
-    p = Project.\
-            query.\
-            join(Project.team).\
-            join(Project.tickets).\
-            filter(Project.pkey == pkey).\
-            filter(Team.url_slug == team_slug).\
-            first()
+    p = Project.get_tickets(team_slug, pkey)
     return jsonify([ tk.to_json() for tk in p.tickets ])
 
 @v1.route("/<string:team_slug>/<string:pkey>/<string:ticket_key>", methods=["GET"])
 def ticket_get(team_slug, pkey, ticket_key):
-    tk = Ticket.query.\
-            join(Ticket.project).\
-            join(Project.team).\
-            filter(Team.url_slug == team_slug).\
-            filter(Project.pkey == pkey).\
-            filter(Ticket.ticket_key == ticket_key).\
-            first()
-    if tk == None:
-        raise AppError(status_code=404, message="Ticket not found.")
+    prl = request.args.get("preload", "")
+    tk = Ticket.get_by_key(team_slug, pkey, ticket_key, prl) 
     return jsonify( tk.to_json() )
+
+
+@v1.route("/<string:team_slug>/<string:pkey>/<string:ticket_key>", methods=["PUT"])
+def ticket_update(team_slug, pkey, ticket_key):
+    return jsonify(message="Not implemented")
+
+@v1.route("/<string:team_slug>/<string:pkey>/<string:ticket_key>", methods=["DELETE"])
+def ticket_delete(team_slug, pkey, ticket_key):
+    return jsonify(message="Not implemented")
+
+@v1.route("/<string:team_slug>/<string:pkey>/<string:ticket_key>/next", methods=["GET"])
+def ticket_next(team_slug, pkey, ticket_key):
+    return jsonify(message="Not implemented")
+
+@v1.route("/<string:team_slug>/<string:pkey>/<string:ticket_key>/prev", methods=["GET"])
+def ticket_prev(team_slug, pkey, ticket_key):
+    return jsonify(message="Not implemented")
