@@ -61,6 +61,10 @@ class User(Base):
         """Extends base class to_json to drop password as well."""
         s = super().to_json()
         s.pop('password', None)
+        s.pop('is_admin', None)
+        s.pop('updatedDate', None)
+        s.pop('createdDate', None)
+        s['fullName'] = s.pop('full_name')
         return s
 
     def update(self, json):
