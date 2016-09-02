@@ -24,10 +24,10 @@ class User(Base):
                                        lazy='dynamic')
     assigned_tickets = db.relationship('Ticket', backref='assignee',
                                        lazy='dynamic',
-                                       primaryjoin = "Ticket.assignee_id == User.id")
+                                       primaryjoin = 'Ticket.assignee_id == User.id')
     reported_tickets  = db.relationship('Ticket', backref='reporter',
                                        lazy='dynamic',
-                                       primaryjoin = "Ticket.reporter_id == User.id")
+                                       primaryjoin = 'Ticket.reporter_id == User.id')
 
     teams    = association_proxy('membership', 'team')
     projects = association_proxy('membership', 'project')
@@ -46,15 +46,15 @@ class User(Base):
         except:
             u = User.query.filter_by(username=param).first()
         if u == None:
-            raise AppError(status_code=404, message="User not found.")
+            raise AppError(status_code=404, message='User not found.')
         return u
 
     def from_json(json):
         validate(json, user_schema)
-        u = User(username=json["username"],
-                 password=json["password"],
-                 full_name=json["fullName"],
-                 email=json["email"])
+        u = User(username=json['username'],
+                 password=json['password'],
+                 full_name=json['fullName'],
+                 email=json['email'])
         return u
 
     def to_json(self):
@@ -68,12 +68,12 @@ class User(Base):
         return s
 
     def update(self, json):
-        self.username = json.get("username", self.username)
-        self.full_name = json.get("fullName", self.full_name)
-        self.email = json.get("email", self.email)
+        self.username = json.get('username', self.username)
+        self.full_name = json.get('fullName', self.full_name)
+        self.email = json.get('email', self.email)
 
-        if json.get("password", None) != None:
-            self.set_password(json["password"])
+        if json.get('password', None) != None:
+            self.set_password(json['password'])
 
     def set_password(self, pw):
         self.password = generate_password_hash(pw)
@@ -82,16 +82,16 @@ class User(Base):
         return check_password_hash(self.password, pw)
 
     def __repr__(self):
-        return "<User %r>" % (self.username)
+        return '<User %r>' % (self.username)
 
 user_schema = {
-    "type": "object",
-    "properties": {
-        "password": { "type": "string" },
-        "username": { "type": "string" },
-        "email": { "type": "string" },
-        "fullName": { "type": "string" },
-        "is_admin": { "type": "boolean" },
+    'type': 'object',
+    'properties': {
+        'password': { 'type': 'string' },
+        'username': { 'type': 'string' },
+        'email': { 'type': 'string' },
+        'fullName': { 'type': 'string' },
+        'is_admin': { 'type': 'boolean' },
     },
-    "required": ["fullName", "email", "username", "password"],
+    'required': ['fullName', 'email', 'username', 'password'],
 }
