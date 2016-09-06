@@ -16,18 +16,20 @@ class User(Base):
     password  = db.Column(db.String(192),  nullable=False)
 
 
-    projects_lead_of = db.relationship('Project', backref='project_lead',
-                                       lazy='dynamic')
-    teams_lead_of    = db.relationship('Team', backref='team_lead',
-                                       lazy='dynamic')
-    memberships      = db.relationship('Membership', backref='user',
-                                       lazy='dynamic')
-    assigned_tickets = db.relationship('Ticket', backref='assignee',
+    comments_author_of = db.relationship('Comment', backref='author',
+                                         lazy='dynamic')
+    projects_lead_of   = db.relationship('Project', backref='project_lead',
+                                         lazy='dynamic')
+    teams_lead_of      = db.relationship('Team', backref='team_lead',
+                                         lazy='dynamic')
+    memberships        = db.relationship('Membership', backref='user',
+                                         lazy='dynamic')
+    assigned_tickets   = db.relationship('Ticket', backref='assignee',
                                        lazy='dynamic',
-                                       primaryjoin = 'Ticket.assignee_id == User.id')
-    reported_tickets  = db.relationship('Ticket', backref='reporter',
+                                       primaryjoin='Ticket.assignee_id == User.id')
+    reported_tickets   = db.relationship('Ticket', backref='reporter',
                                        lazy='dynamic',
-                                       primaryjoin = 'Ticket.reporter_id == User.id')
+                                       primaryjoin='Ticket.reporter_id == User.id')
 
     teams    = association_proxy('membership', 'team')
     projects = association_proxy('membership', 'project')
@@ -64,10 +66,11 @@ class User(Base):
         s.pop('is_admin', None)
         s.pop('updatedDate', None)
         s.pop('createdDate', None)
-        s['fullName'] = s.pop('full_name')
+        s['fullName'] = s.pop('full_name', s.get('fullName', ''))
         return s
 
     def update(self, json):
+        validate(self, user_update_schema)
         self.username = json.get('username', self.username)
         self.full_name = json.get('fullName', self.full_name)
         self.email = json.get('email', self.email)
@@ -94,4 +97,16 @@ user_schema = {
         'is_admin': { 'type': 'boolean' },
     },
     'required': ['fullName', 'email', 'username', 'password'],
+}
+
+user_update_schema = {
+    'type': 'object',
+    'properties': {
+        'password': { 'type': 'string' },
+        'username': { 'type': 'string' },
+        'email': { 'type': 'string' },
+        'fullName': { 'type': 'string' },
+        'is_admin': { 'type': 'boolean' },
+    },
+    'required': ['fullName', 'email', 'username'],
 }
