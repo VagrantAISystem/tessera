@@ -4,7 +4,8 @@ import jwt
 from datetime import timedelta
 from datetime import datetime as dt
 
-from tessera import app
+from tessera import app, cache
+from tessera.v1.models import User
 
 from tessera.lib import AppError
 
@@ -38,7 +39,7 @@ def auth_required(f):
             raise AppError(message="Token is invalid", status_code = 401)
         except jwt.ExpiredSignature as e:
             raise AppError(message="Token has expired.", status_code = 401)
-        g.user = User.from_json(cache.get(payload['sub']))
+        g.user = User.get_by_username_or_id(payload['sub'])
         return f(*args, **kwargs)
 
     return decorated_function
