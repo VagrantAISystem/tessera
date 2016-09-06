@@ -59,6 +59,10 @@ for i in range(100):
     s += 1
     if s == len(statuses):
         s = 0
+    for i in range(5):
+        cmt = Comment(body="Hi I'm a comment. #" + str(i),
+                      author=test)
+        t.comments.append(cmt)
     testp.tickets.append(t)
 
 db.session.add(a_team)
