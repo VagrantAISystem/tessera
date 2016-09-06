@@ -66,7 +66,6 @@ team_schema = {
         'team_lead': { 
             'type': 'object',
             'properties': {
-                'id': { 'type': 'integer' },
                 'username': { 'type': 'string' },
                 'email': { 'type': 'string' },
                 'fullName': { 'type': 'string' },
