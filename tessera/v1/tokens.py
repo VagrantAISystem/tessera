@@ -16,7 +16,6 @@ def session_create():
 
     if u.check_password(ujson.get("password", "")):
         tkn = tk.create_token(u.id)
-        cache.set(u.id, u.serialize())
         return jsonify(token=tkn)
 
     raise AppError(message="Invalid username/password.", status_code = 401)
