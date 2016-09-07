@@ -43,6 +43,11 @@ class Ticket(Base):
             raise AppError(status_code=404, message='Ticket not found.')
         return tk
 
+    def from_json(json):
+        validate(json, ticket_schema) 
+        t = Ticket(summary=json['summary'],
+                   description=json['description'],
+                   )
     def to_json(self):
         s = super().to_json()
         s.pop('reporter_id', None)
@@ -54,5 +59,3 @@ class Ticket(Base):
 
     def __repr__(self):
         return '<Ticket %r>' % (self.ticket_key)
-
-

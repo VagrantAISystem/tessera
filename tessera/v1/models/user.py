@@ -1,6 +1,7 @@
 from jsonschema import validate
 from tessera import db
 from tessera.v1.models import Base
+from tessera.v1.models.schemas import user_schema, user_signup_schema
 from tessera.lib import AppError
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.exc import IntegrityError
@@ -52,7 +53,7 @@ class User(Base):
         return u
 
     def from_json(json):
-        validate(json, user_schema)
+        validate(json, user_signup_schema)
         u = User(username=json['username'],
                  password=json['password'],
                  full_name=json['fullName'],
@@ -70,7 +71,7 @@ class User(Base):
         return s
 
     def update(self, json):
-        validate(self, user_update_schema)
+        validate(self, user_schema)
         self.username = json.get('username', self.username)
         self.full_name = json.get('fullName', self.full_name)
         self.email = json.get('email', self.email)
@@ -86,27 +87,3 @@ class User(Base):
 
     def __repr__(self):
         return '<User %r>' % (self.username)
-
-user_schema = {
-    'type': 'object',
-    'properties': {
-        'password': { 'type': 'string' },
-        'username': { 'type': 'string' },
-        'email': { 'type': 'string' },
-        'fullName': { 'type': 'string' },
-        'is_admin': { 'type': 'boolean' },
-    },
-    'required': ['fullName', 'email', 'username', 'password'],
-}
-
-user_update_schema = {
-    'type': 'object',
-    'properties': {
-        'password': { 'type': 'string' },
-        'username': { 'type': 'string' },
-        'email': { 'type': 'string' },
-        'fullName': { 'type': 'string' },
-        'is_admin': { 'type': 'boolean' },
-    },
-    'required': ['fullName', 'email', 'username'],
-}

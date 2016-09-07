@@ -3,6 +3,7 @@ from sqlalchemy import or_
 from sqlalchemy.orm import joinedload
 from jsonschema import validate
 from tessera.v1.models.base import Base
+from tessera.v1.models.schemas import team_create_schema
 
 class Team(Base):
     """Team is a container for projects.
@@ -30,9 +31,9 @@ class Team(Base):
         self.url_slug = name.lower().replace(' ', '-')
 
     def from_json(json):
-        validate(json, team_schema)
+        validate(json, team_create_schema)
         t = Team(name=json['name'],
-                 icone=json.get('icon', ''))
+                 icon=json.get('icon', ''))
         un = json.get('project_lead',{}).get('username', '')
         lead =  User.query.filter_by(username=un).first()
         t.team_lead = lead
@@ -58,20 +59,4 @@ class Team(Base):
     def __repr__(self):
         return '<Team %r>' % (self.name)
 
-team_schema = {
-    'type': 'object',
-    'properties': {  
-        'name': { 'type': 'string' },
-        'icon': { 'type': 'string' },
-        'team_lead': { 
-            'type': 'object',
-            'properties': {
-                'username': { 'type': 'string' },
-                'email': { 'type': 'string' },
-                'fullName': { 'type': 'string' },
-            },
-            'required': [ 'username' ],
-        },
-    },
-    'required': [ 'team_lead', 'name' ],
-}
+

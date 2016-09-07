@@ -48,19 +48,3 @@ class Comment(Base):
                 filter(Comment.ticket_id == ticket.id)
         return cmts
 
-comment_schema = {
-    'type': 'object',
-    'properties': {  
-        'body': { 'type': 'string' },
-        'author': { 
-            'type': 'object',
-            'properties': {
-                'username': { 'type': 'string' },
-                'email': { 'type': 'string' },
-                'fullName': { 'type': 'string' },
-            },
-            'required': [ 'username' ],
-        },
-    },
-    'required': [ 'body', 'author' ],
-}
