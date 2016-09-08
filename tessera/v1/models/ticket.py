@@ -53,7 +53,8 @@ class Ticket(Base):
         t = Ticket(summary=json['summary'],
                    description=json['description'], 
                    ticket_key=prjct.pkey + "-" + str(len(prjct.tickets) + 1),
-                   reporter_id=r.id)
+                   reporter_id=r.id,
+                   project_id=prjct.id)
         if a != None:
             t.assignee_id = a.id
         return t
