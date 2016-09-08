@@ -2,7 +2,9 @@ from tessera import db
 from tessera.v1.models.project import Project
 from tessera.v1.models.team import Team
 from tessera.v1.models.base import Base
+from tessera.v1.models.schemas import ticket_schema
 from sqlalchemy.orm import joinedload
+from jsonschema import validate
 
 class Ticket(Base):
     """A ticket is a unit of work for a project, be it a bug or support ticket."""
@@ -43,11 +45,13 @@ class Ticket(Base):
             raise AppError(status_code=404, message='Ticket not found.')
         return tk
 
-    def from_json(json):
+    def from_json(prjct, json):
         validate(json, ticket_schema) 
         t = Ticket(summary=json['summary'],
-                   description=json['description'],
-                   )
+                   description=json['description'], 
+                   ticket_key=prjct.pkey + "-" + str(len(prjct.tickets) + 1))
+        return t
+
     def to_json(self):
         s = super().to_json()
         s.pop('reporter_id', None)
