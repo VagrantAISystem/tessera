@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 user_schema = {
     'type': 'object',
     'properties': {
@@ -11,7 +13,8 @@ user_schema = {
     'required': ['username'],
 }
 
-user_signup_schema = user_schema.copy()['required'] + ['fullName', 'email', 'password']
+user_signup_schema = deepcopy(user_schema)
+user_signup_schema['required'] += ['fullName', 'email', 'password']
 
 team_schema = {
     'type': 'object',
@@ -24,7 +27,8 @@ team_schema = {
     'required': [ 'name' ],
 }
 
-team_create_schema = team_schema.copy()['required'] + ['team_lead']
+team_create_schema = deepcopy(team_schema)
+team_create_schema['required'] += ['team_lead']
 
 project_schema = {
     'type': 'object',
@@ -65,7 +69,8 @@ ticket_schema = {
     'required': [ 'summary', 'description', 'reporter' ],
 }
 
-ticket_test_schema = ticket_schema.copy()['required'] + ['assignee', 'ticketKey']
+ticket_test_schema = deepcopy(ticket_schema)
+ticket_test_schema['required'] += ['assignee', 'ticketKey']
 
 comment_schema = {
     'type': 'object',
