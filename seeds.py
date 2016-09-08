@@ -50,7 +50,7 @@ a_team.projects.append(testp)
 s = 0
 for i in range(100):
     t = Ticket(ticket_key=testp.pkey + "-" +
-               str(Project.query.filter_by(pkey=testp.pkey).first().tickets.count() + 1),
+               str(len(Project.query.filter_by(pkey=testp.pkey).first().tickets) + 1),
                summary="This is test ticket #" + str(i + 1),
                description="This isn't helplful")
     t.assignee = test
