@@ -1,6 +1,7 @@
 from tessera import db
 from tessera.v1.models.project import Project
 from tessera.v1.models.team import Team
+from tessera.v1.models.user import User
 from tessera.v1.models.base import Base
 from tessera.v1.models.schemas import ticket_schema
 from sqlalchemy.orm import joinedload
@@ -47,9 +48,14 @@ class Ticket(Base):
 
     def from_json(prjct, json):
         validate(json, ticket_schema) 
+        r = User.get_by_username_or_id(json.get("reporter", {}).get("username", ""))
+        a = User.get_by_username_or_id(json.get("assignee", {}).get("username", ""))
         t = Ticket(summary=json['summary'],
                    description=json['description'], 
-                   ticket_key=prjct.pkey + "-" + str(len(prjct.tickets) + 1))
+                   ticket_key=prjct.pkey + "-" + str(len(prjct.tickets) + 1),
+                   reporter_id=r.id)
+        if a != None:
+            t.assignee_id = a.id
         return t
 
     def to_json(self):
