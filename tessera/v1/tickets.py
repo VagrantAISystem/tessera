@@ -1,6 +1,7 @@
 from flask import jsonify, request, g
 from tessera.v1 import v1
-from tessera.v1.models import Ticket, Project, Team, Comment
+from tessera import db
+from tessera.v1.models import Ticket, Project, Comment
 
 @v1.route("/tickets", methods=["GET"])
 def ticket_index_all():
@@ -13,8 +14,14 @@ def ticket_index(team_slug, pkey):
 
 @v1.route("/<string:team_slug>/<string:pkey>/tickets", methods=["POST"])
 def ticket_create(team_slug, pkey):
-    p = Project.get_tickets(team_slug, pkey)
-    return jsonify(message="Ticket successfully created.")
+    jsn = request.get_json()
+    p = Project.get_by_key(team_slug, pkey)
+    tk = Ticket.from_json(p, jsn)
+    p.tickets.append(tk)
+    db.session.add(p)
+    db.session.commit()
+    return jsonify(message="Ticket successfully created.", 
+                   link="/api/v1/"+team_slug+"/"+pkey+"/"+tk.ticket_key)
 
 @v1.route("/<string:team_slug>/<string:pkey>/<string:ticket_key>", methods=["GET"])
 def ticket_get(team_slug, pkey, ticket_key):
