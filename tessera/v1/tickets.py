@@ -17,11 +17,9 @@ def ticket_create(team_slug, pkey):
     jsn = request.get_json()
     p = Project.get_by_key(team_slug, pkey)
     tk = Ticket.from_json(p, jsn)
-    p.tickets.append(tk)
-    db.session.add(p)
+    db.session.add(tk)
     db.session.commit()
-    return jsonify(message="Ticket successfully created.", 
-                   link="/api/v1/"+team_slug+"/"+pkey+"/"+tk.ticket_key)
+    return jsonify(tk.to_json())
 
 @v1.route("/<string:team_slug>/<string:pkey>/<string:ticket_key>", methods=["GET"])
 def ticket_get(team_slug, pkey, ticket_key):
