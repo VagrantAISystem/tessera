@@ -15,7 +15,10 @@ def test_ticket_create():
                         },
                     })
     jsn = json.loads(r.data.decode("utf-8"))
-    assert jsn == { "message": "Ticket successfully created." }
+    assert jsn == { 
+                    "message": "Ticket successfully created.", 
+                    "link": "/api/v1/the-a-team/TEST/TEST-101"
+                  }
 
 # Read
 def test_ticket_get():
