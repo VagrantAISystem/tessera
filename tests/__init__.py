@@ -7,14 +7,14 @@ from jsonschema import validate
 
 def setup_module(module):
     """Clears out the database and re seeds it for the tests."""
-    if os.path.isfile(tessera.app.config.TEST_DB_LOCATION):
-        os.remove(tessera.app.config.TEST_DB_LOCATION)
+    if os.path.isfile(tessera.app.config.DEFAULT_DB_LOCATION):
+        os.remove(tessera.app.config.DEFAULT_DB_LOCATION)
     import seeds
 
 def teardown_module(module):
     """Removes the database after the tests."""
-    if os.path.isfile(tessera.app.config.TEST_DB_LOCATION):
-        os.remove(tessera.app.config.TEST_DB_LOCATION)
+    if os.path.isfile(tessera.app.config.DEFAULT_DB_LOCATION):
+        os.remove(tessera.app.config.DEFAULT_DB_LOCATION)
 
 def get_token(admin):
     if admin:
