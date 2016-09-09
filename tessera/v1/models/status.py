@@ -1,3 +1,5 @@
+import enum
+
 from tessera import db
 from sqlalchemy import CheckConstraint
 from tessera.v1.models import Base
@@ -14,9 +16,15 @@ status_relationships = db.Table(
     db.PrimaryKeyConstraint('status_id', 'next_status_id')
 )
 
+class StatusType(enum.Enum):
+    TODO        = "To Do"
+    IN_PROGRESS = "In Progress"
+    DONE        = "Done"
+
+
 class Status(Base):
     name          = db.Column(db.String(100), nullable=False)
-    status_type   = db.Column(db.Integer)
+    status_type   = db.Column(db.Enum(StatusType))
     next_statuses = db.relationship('Status', 
                                     secondary=status_relationships,
                                     primaryjoin="Status.id == status_relationships.c.status_id",
