@@ -54,6 +54,16 @@ status_schema = {
     'required': [ 'id', 'name', 'statusType' ],
 }
 
+field_schema = {
+    'type': 'object',
+    'properties': {
+        'id': { 'type': 'integer' },
+        'name': { 'type': 'string' },
+        'value': { 'type': ['string', 'integer', 'float'] },
+    },
+    'required': ['id', 'name', 'value']
+}
+
 ticket_schema = {
     'type': 'object',
     'properties': {
@@ -65,6 +75,10 @@ ticket_schema = {
         'reporter': user_schema,
         'project': project_schema,
         'status': status_schema,
+        'fields': {
+            'type': 'array',
+            'items': field_schema,
+        },
     },
     'required': [ 'summary', 'description', 'reporter' ],
 }
