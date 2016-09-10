@@ -25,7 +25,7 @@ if os.path.isfile(SECRET_KEY_FILE):
         SECRET_KEY = skf.read()
 else:
     SECRET_KEY = ''.join(random.SystemRandom().choice(string.ascii_uppercase +
-                                         string.digits) for _ in range(N))
+                                         string.digits) for _ in range(32))
     with open(SECRET_KEY_FILE, "w") as skf:
         skf.write(SECRET_KEY)
 
