@@ -1,8 +1,8 @@
 import tessera.lib.tokens as tk
 
-from tessera.v1.models import User
+from tessera.models.v1 import User
 from flask import jsonify, g, request
-from tessera.v1 import v1
+from tessera.api.v1 import v1
 from tessera import cache, app
 
 @v1.route("/tokens", methods=["POST"])

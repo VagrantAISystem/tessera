@@ -5,7 +5,7 @@ from datetime import timedelta
 from datetime import datetime as dt
 
 from tessera import app, cache
-from tessera.v1.models import User
+from tessera.models.v1 import User
 
 from tessera.lib import AppError
 

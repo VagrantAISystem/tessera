@@ -1,8 +1,8 @@
 from tessera import db, cache, app
-from tessera.v1.models import User
+from tessera.models.v1 import User
 from tessera.lib.tokens import create_token, auth_required, admin_required
 from flask import jsonify, request, g
-from tessera.v1 import v1
+from tessera.api.v1 import v1
 
 @v1.route("/users", methods=["GET"])
 @admin_required

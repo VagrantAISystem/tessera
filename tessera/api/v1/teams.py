@@ -1,6 +1,6 @@
-from tessera.v1.models import Team
+from tessera.models.v1 import Team
 from flask import jsonify, request, g
-from tessera.v1 import v1
+from tessera.api.v1 import v1
 
 @v1.route("/teams", methods=["GET"])
 def team_index():

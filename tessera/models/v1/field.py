@@ -2,7 +2,7 @@ import enum
 
 from tessera import db
 from tessera.lib import AppError
-from tessera.v1.models.base import Base
+from tessera.models.v1.base import Base
 
 class DataTypes(enum.Enum):
     INTEGER = "INTEGER"

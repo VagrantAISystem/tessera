@@ -1,6 +1,6 @@
 import tests
 import json
-# from tessera.v1.models.schemas import member_schema
+# from tessera.models.v1.schemas import member_schema
 
 # Create
 def test_member_create():

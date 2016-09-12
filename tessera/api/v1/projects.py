@@ -1,9 +1,9 @@
 from tessera import app
 from tessera.lib.tokens import auth_required
-from tessera.v1.models import Team, Project
+from tessera.models.v1 import Team, Project
 from tessera.lib import AppError
 from flask import jsonify, g, request
-from tessera.v1 import v1
+from tessera.api.v1 import v1
 
 @v1.route("/projects", methods=["GET"])
 def project_index_all():

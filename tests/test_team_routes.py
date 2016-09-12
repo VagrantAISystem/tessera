@@ -1,6 +1,6 @@
 import tests
 import json
-from tessera.v1.models.schemas import team_schema
+from tessera.models.v1.schemas import team_schema
 
 # Create
 def test_team_create():

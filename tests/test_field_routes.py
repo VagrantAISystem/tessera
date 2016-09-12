@@ -1,6 +1,6 @@
 import tests
 import json
-# from tessera.v1.models.schemas import field_schema
+# from tessera.models.v1.schemas import field_schema
 
 # Create
 def test_field_create():

@@ -1,5 +1,5 @@
 from tessera import db
-from tessera.v1.models.base import Base
+from tessera.models.v1.base import Base
 
 class Membership(Base):
     """Membership is used to control access and permissions for a project or

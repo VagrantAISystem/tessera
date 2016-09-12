@@ -1,10 +1,10 @@
 from tessera import db
-from tessera.v1.models.project import Project
-from tessera.v1.models.team import Team
-from tessera.v1.models.user import User
-from tessera.v1.models.base import Base
-from tessera.v1.models.field import custom_field_ticket_value
-from tessera.v1.models.schemas import ticket_schema
+from tessera.models.v1.project import Project
+from tessera.models.v1.team import Team
+from tessera.models.v1.user import User
+from tessera.models.v1.base import Base
+from tessera.models.v1.field import custom_field_ticket_value
+from tessera.models.v1.schemas import ticket_schema
 from sqlalchemy.orm import joinedload
 from jsonschema import validate
 

@@ -2,7 +2,7 @@ import enum
 
 from tessera import db
 from sqlalchemy import CheckConstraint
-from tessera.v1.models import Base
+from tessera.models.v1 import Base
 
 # This table shows us our workflow, we query our next statuses by getting all
 # rows with a given status_id and then we can find our previous statuses by

@@ -1,6 +1,6 @@
 import sys
 from tessera import db
-from tessera.v1.models import *
+from tessera.models.v1 import *
 
 testadmin = User(username="testadmin",
                  email="test@example.com",

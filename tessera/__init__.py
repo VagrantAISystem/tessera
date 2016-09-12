@@ -36,7 +36,7 @@ from tessera.models.v1 import *
 db.create_all()
 
 # Register blueprints
-from tessera.v1 import v1
+from tessera.api.v1 import v1
 app.register_blueprint(v1)
 
 # DEBUG purposes TODO: Remove

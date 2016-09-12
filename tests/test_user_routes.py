@@ -1,6 +1,6 @@
 import tests
 import json
-from tessera.v1.models.schemas import user_schema
+from tessera.models.v1.schemas import user_schema
 
 # Create
 def test_user_create():

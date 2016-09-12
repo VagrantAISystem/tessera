@@ -1,7 +1,7 @@
 from tessera import db
-from tessera.v1.models.base import Base
+from tessera.models.v1.base import Base
 from sqlalchemy.orm import joinedload
-from tessera.v1.models.team import Team
+from tessera.models.v1.team import Team
 
 
 class Project(Base):

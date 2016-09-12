@@ -1,6 +1,6 @@
 import tests
 import json
-from tessera.v1.models.schemas import ticket_test_schema
+from tessera.models.v1.schemas import ticket_test_schema
 
 # Create
 def test_ticket_create():

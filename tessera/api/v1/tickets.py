@@ -1,7 +1,7 @@
 from flask import jsonify, request, g
-from tessera.v1 import v1
+from tessera.api.v1 import v1
 from tessera import db
-from tessera.v1.models import Ticket, Project, Comment
+from tessera.models.v1 import Ticket, Project, Comment
 
 @v1.route("/tickets", methods=["GET"])
 def ticket_index_all():

@@ -1,7 +1,7 @@
 from jsonschema import validate
 from tessera import db
-from tessera.v1.models import Base
-from tessera.v1.models.schemas import user_schema, user_signup_schema
+from tessera.models.v1 import Base
+from tessera.models.v1.schemas import user_schema, user_signup_schema
 from tessera.lib import AppError
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.exc import IntegrityError
