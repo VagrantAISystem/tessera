@@ -32,7 +32,7 @@ db = SQLAlchemy(app)
 # Register error handlers
 import tessera.errors
 
-from tessera.v1.models import *
+from tessera.models.v1 import *
 db.create_all()
 
 # Register blueprints
