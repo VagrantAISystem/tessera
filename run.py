@@ -4,7 +4,7 @@ from tessera import app
 from gevent.wsgi import WSGIServer
 
 if config.TESSERA_ENV == "development":
-    app.run(host='0.0.0.0', port=8080, debug=config.Debug)
+    app.run(host='0.0.0.0', port=8080, debug=config.DEBUG)
 
 http_server = WSGIServer(('', 8080), app)
 http_server.serve_forever()
