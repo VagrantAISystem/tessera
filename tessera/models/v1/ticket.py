@@ -3,6 +3,7 @@ from tessera.v1.models.project import Project
 from tessera.v1.models.team import Team
 from tessera.v1.models.user import User
 from tessera.v1.models.base import Base
+from tessera.v1.models.field import custom_field_ticket_value
 from tessera.v1.models.schemas import ticket_schema
 from sqlalchemy.orm import joinedload
 from jsonschema import validate
@@ -18,9 +19,7 @@ class Ticket(Base):
     project_id  = db.Column(db.Integer, db.ForeignKey('project.id'))
     status_id   = db.Column(db.Integer, db.ForeignKey('status.id'))
 
-    available_fields = db.relationship('Field', )
-    fields           = db.relationship('Field', backref='')
-
+    fields      = db.relationship('FieldValue', backref='ticket')
     comments    = db.relationship('Comment', backref='ticket', lazy='dynamic')
 
     def __init__(self, *, ticket_key, summary, description, status="Open", assignee_id=None, reporter_id=None):
