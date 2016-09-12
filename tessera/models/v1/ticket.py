@@ -3,7 +3,6 @@ from tessera.models.v1.project import Project
 from tessera.models.v1.team import Team
 from tessera.models.v1.user import User
 from tessera.models.v1.base import Base
-from tessera.models.v1.field import custom_field_ticket_value
 from tessera.models.v1.schemas import ticket_schema
 from sqlalchemy.orm import joinedload
 from jsonschema import validate
