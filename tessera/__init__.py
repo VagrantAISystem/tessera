@@ -39,6 +39,7 @@ db.create_all()
 from tessera.api.v1 import v1
 app.register_blueprint(v1)
 
-# DEBUG purposes TODO: Remove
-for rule in app.url_map.iter_rules():
-    print(rule)
+@app.route("/", methods=["GET"])
+def list_routes():
+    for rule in app.url_map.iter_rules():
+        print(rule)
