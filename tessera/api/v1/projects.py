@@ -10,7 +10,7 @@ def project_index_all():
     return jsonify([ p.to_json() for p in Project.query.all() ])
 
 # TODO: Should the query here be pulled into the Team model?
-@v1.route("/<string:team_slug>/projects", methods=["GET"])
+@v1.route("/teams/<string:team_slug>/projects", methods=["GET"])
 def project_index(team_slug):
     t = Team.query.\
             join(Team.projects).\
@@ -20,16 +20,16 @@ def project_index(team_slug):
         raise AppError(status_code=404, message="Team not found.")
     return jsonify([ p.to_json() for p in t.projects ])
 
-@v1.route("/<string:team_slug>/projects", methods=["POST"])
+@v1.route("/teams/<string:team_slug>/projects", methods=["POST"])
 def project_create(team_slug):
     return jsonify(message="not implemented")
 
-@v1.route("/<string:team_slug>/<string:pkey>", methods=["GET"])
+@v1.route("/teams/<string:team_slug>/<string:pkey>", methods=["GET"])
 def project_get(team_slug, pkey):
     p = Project.get_by_key(team_slug, pkey, request.args.get("preload", False))
     return jsonify( p.to_json() )
 
-@v1.route("/<string:team_slug>/<string:pkey>", methods=["PUT"])
+@v1.route("/teams/<string:team_slug>/<string:pkey>", methods=["PUT"])
 @auth_required
 def project_update(team_slug, pkey):
     p = Project.get_by_key(team_slug, pkey)
@@ -41,7 +41,7 @@ def project_update(team_slug, pkey):
     raise AppError(status_code=403,
                    message="You are not permitted to perform that action")
 
-@v1.route("/<string:team_slug>/<string:pkey>/members", methods=["GET"])
+@v1.route("/teams/<string:team_slug>/<string:pkey>/members", methods=["GET"])
 def project_members_index(team_slug, pkey):
     m = Membership.get_project_memberships(team_slug, pkey)
     return m
