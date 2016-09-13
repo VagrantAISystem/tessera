@@ -62,13 +62,7 @@ class User(Base):
 
     def to_json(self):
         """Extends base class to_json to drop password as well."""
-        s = super().to_json()
-        s.pop('password', None)
-        s.pop('is_admin', None)
-        s.pop('updatedDate', None)
-        s.pop('createdDate', None)
-        s['fullName'] = s.pop('full_name', s.get('fullName', ''))
-        return s
+        return super().to_json(ignoreFields=["password", "is_admin", "created_at", "updated_at"])
 
     def update(self, json):
         validate(self, user_schema)

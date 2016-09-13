@@ -40,10 +40,7 @@ class Team(Base):
         return t
 
     def to_json(self):
-        s = super().to_json()
-        s.pop('team_lead_id', None)
-        s.pop('updatedDate', None)
-        return s
+        return super().to_json(ignoreFields=["updated_at"])
 
     def get_by_name_or_stub(name):
         t = Team.query.\

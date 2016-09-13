@@ -1,7 +1,7 @@
 import config
 from os import environ
 from tessera import app
-from gevent.wsgi import WSGIServer
+from gevent.pywsgi import WSGIServer
 
 if config.TESSERA_ENV == "development":
     app.run(host='0.0.0.0', port=8080, debug=config.DEBUG)
