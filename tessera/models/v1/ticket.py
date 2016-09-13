@@ -18,7 +18,7 @@ class Ticket(Base):
     project_id  = db.Column(db.Integer, db.ForeignKey('project.id'))
     status_id   = db.Column(db.Integer, db.ForeignKey('status.id'))
 
-    fields      = db.relationship('FieldValue', backref='ticket')
+    # fields      = db.relationship('FieldValue', backref='ticket')
     comments    = db.relationship('Comment', backref='ticket', lazy='dynamic')
 
     def __init__(self, *, ticket_key, summary, description, status="Open", assignee_id=None, reporter_id=None):
@@ -59,15 +59,6 @@ class Ticket(Base):
         if a != None:
             t.assignee_id = a.id
         return t
-
-    def to_json(self):
-        s = super().to_json()
-        s.pop('reporter_id', None)
-        s.pop('assignee_id', None)
-        s.pop('project_id', None)
-        s.pop('status_id')
-        s['ticketKey'] = s.pop('ticket_key')
-        return s
 
     def __repr__(self):
         return '<Ticket %r>' % (self.ticket_key)

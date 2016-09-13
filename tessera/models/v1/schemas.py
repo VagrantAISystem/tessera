@@ -6,7 +6,7 @@ user_schema = {
         'id': { 'type': 'integer' },
         'password': { 'type': 'string' },
         'username': { 'type': 'string' },
-        'email': { 'type': 'string' },
+        'email': { 'type': 'string', 'format': 'email' },
         'fullName': { 'type': 'string' },
         'isAdmin': { 'type': 'boolean' },
     },
@@ -22,13 +22,13 @@ team_schema = {
         'id': { 'type': 'integer' },
         'name': { 'type': 'string' },
         'icon': { 'type': 'string' },
-        'team_lead': user_schema,
+        'teamLead': user_schema,
     },
     'required': [ 'name' ],
 }
 
 team_create_schema = deepcopy(team_schema)
-team_create_schema['required'] += ['team_lead']
+team_create_schema['required'] += ['teamLead']
 
 project_schema = {
     'type': 'object',
@@ -39,9 +39,9 @@ project_schema = {
         'repo': { 'type': 'string' },
         'homepage': { 'type': 'string' },
         'team': team_schema,
-        'project_lead': user_schema,
+        'projectLead': user_schema,
     },
-    'required': [ 'pkey', 'name', 'project_lead' ],
+    'required': [ 'pkey', 'name', 'projectLead' ],
 }
 
 status_schema = {
@@ -71,6 +71,8 @@ ticket_schema = {
         'ticketKey': { 'type': 'string' },
         'summary': { 'type': 'string' },
         'description': { 'type': 'string' },
+        'updatedAt': { 'type': 'string', 'format': 'date-time' },
+        'createdAt': { 'type': 'string', 'format': 'date-time' },
         'assignee': user_schema,
         'reporter': user_schema,
         'project': project_schema,

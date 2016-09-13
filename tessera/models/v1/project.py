@@ -35,11 +35,7 @@ class Project(Base):
         return p
 
     def to_json(self):
-        s = super().to_json()
-        s.pop('project_lead_id', None)
-        s.pop('team_id', None)
-        s.pop('updatedDate', None)
-        return s
+        return super().to_json(ignoreFields=["updated_at"])
 
     def __repr__(self):
         return "<Project %r>" % (self.pkey)
