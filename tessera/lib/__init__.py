@@ -4,20 +4,13 @@ This module contains various convenviences that are used throughout the entire
 application
 """
 
+import re
 from functools import wraps
-from flask import session
-from flask.json import jsonify
 
-def requires_login(f):
-    """This decorator protects a route behind authentication."""
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if session['user_id'] is None:
-            err = jsonify({ "error_message": "Not authorized." })
-            err.status_code = 403
-            return err
-        return f(*args, **kwargs)
-    return decorated_function
+under_pat = under_pat = re.compile(r'_([a-z])')
+
+def to_camel_case(snake_str):
+    return under_pat.sub(lambda x: x.group(1).upper(), snake_str)
 
 class AppError(Exception):
     def __init__(self, *, status_code, message):
