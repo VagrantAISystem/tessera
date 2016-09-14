@@ -16,7 +16,7 @@ class Team(Base):
     url_slug = db.Column(db.String(150), nullable=False, unique=True)
     icon     = db.Column(db.String(150))    
 
-    team_lead_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    team_lead_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     projects = db.relationship('Project', backref='team', lazy='dynamic')
     members  = db.relationship('Membership', backref='team', lazy='dynamic')

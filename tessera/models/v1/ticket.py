@@ -13,8 +13,8 @@ class Ticket(Base):
     summary     = db.Column(db.String(250), nullable=False)
     description = db.Column(db.Text())
 
-    assignee_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    reporter_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    assignee_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    reporter_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     project_id  = db.Column(db.Integer, db.ForeignKey('project.id'))
     status_id   = db.Column(db.Integer, db.ForeignKey('status.id'))
 

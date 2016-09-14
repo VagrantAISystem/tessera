@@ -16,15 +16,9 @@ status_relationships = db.Table(
     db.PrimaryKeyConstraint('status_id', 'next_status_id')
 )
 
-class StatusType(enum.Enum):
-    TODO        = "To Do"
-    IN_PROGRESS = "In Progress"
-    DONE        = "Done"
-
-
 class Status(Base):
     name          = db.Column(db.String(100), nullable=False)
-    status_type   = db.Column(db.Enum(StatusType))
+    status_type   = db.Column(db.Enum("TODO", "IN_PROGRESS", "DONE", name='status_types'))
     next_statuses = db.relationship('Status', 
                                     secondary=status_relationships,
                                     primaryjoin="Status.id == status_relationships.c.status_id",
@@ -33,11 +27,6 @@ class Status(Base):
                                     lazy='dynamic')
 
     tickets = db.relationship('Ticket', backref='status', lazy='dynamic')
-
-    __table_args__ = (
-        CheckConstraint(status_type<3, name='check_type_less_than_three'),
-        CheckConstraint(status_type>=0, name='check_type_positive'),
-        {})
 
     def __init__(self, *, name, status_type=0):
         self.name        = name
