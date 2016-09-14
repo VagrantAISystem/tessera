@@ -21,10 +21,10 @@ db.session.add(a_team)
 db.session.commit()
 
 # make the default statuses
-backlog     = Status(name="Backlog", status_type=0)
-in_progress = Status(name="In Progress", status_type=1)
-on_hold     = Status(name="On Hold", status_type=1)
-closed      = Status(name="Closed", status_type=2)
+backlog     = Status(name="Backlog", status_type="TODO")
+in_progress = Status(name="In Progress", status_type="IN_PROGRESS")
+on_hold     = Status(name="On Hold", status_type="IN_PROGRESS")
+closed      = Status(name="Closed", status_type="DONE")
 
 backlog.next_statuses.append(in_progress)
 backlog.next_statuses.append(on_hold)
