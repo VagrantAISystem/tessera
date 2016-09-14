@@ -1,18 +1,22 @@
 from flask import jsonify, request, g
 from tessera.api.v1 import v1
 from tessera import db
+from tessera.lib.tokens import auth_required
 from tessera.models.v1 import Ticket, Project, Comment
 
 @v1.route("/tickets", methods=["GET"])
+@auth_required
 def ticket_index_all():
     return jsonify([ t.to_json() for t in Ticket.query.all() ])
 
 @v1.route("/tickets/<string:team_slug>/<string:pkey>/tickets", methods=["GET"])
+@auth_required
 def ticket_index(team_slug, pkey):
     p = Project.get_tickets(team_slug, pkey)
     return jsonify([ tk.to_json() for tk in p.tickets ])
 
 @v1.route("/tickets/<string:team_slug>/<string:pkey>/tickets", methods=["POST"])
+@auth_required
 def ticket_create(team_slug, pkey):
     jsn = request.get_json()
     p = Project.get_by_key(team_slug, pkey)
@@ -22,6 +26,7 @@ def ticket_create(team_slug, pkey):
     return jsonify(tk.to_json())
 
 @v1.route("/tickets/<string:team_slug>/<string:pkey>/<string:ticket_key>", methods=["GET"])
+@auth_required
 def ticket_get(team_slug, pkey, ticket_key):
     prl = request.args.get("preload", "")
     tk = Ticket.get_by_key(team_slug, pkey, ticket_key, prl) 
@@ -44,11 +49,12 @@ def ticket_prev(team_slug, pkey, ticket_key):
     return jsonify(message="Not implemented")
 
 @v1.route("/tickets/<string:team_slug>/<string:pkey>/<string:ticket_key>/comments", methods=["GET"])
-def comment_index(team_slug, pkey, ticket_key):
-    cmts = Comment.get_all(team_slug, pkey, ticket_key)
-    return jsonify([ c.to_json() for c in cmts ])
+@auth_required
+def ticket_update(team_slug, pkey, ticket_key):
+    return jsonify(message="Not implemented")
 
 @v1.route("/tickets/<string:team_slug>/<string:pkey>/<string:ticket_key>/comments", methods=["POST"])
+@auth_required
 def comment_create(team_slug, pkey, ticket_key):
     j = request.get_json()
     c = Comment.from_json(j)
