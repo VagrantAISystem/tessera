@@ -26,7 +26,7 @@ def test_team_create():
 
 # Read
 def test_team_get():
-    r = tests.a_get("/api/v1/the-a-team")
+    r = tests.a_get("/api/v1/teams/the-a-team")
     jsn = json.loads(r.data.decode("utf-8"))
     assert tests.test_json(jsn, team_schema)
 
@@ -64,9 +64,9 @@ def test_team_update():
 
 # Delete
 def test_team_delete():
-    r = tests.t_delete("/api/v1/the-a-team")
+    r = tests.t_delete("/api/v1/teams/the-a-team")
     assert r.status_code == 401
-    r = tests.a_delete("/api/v1/the-a-team")
+    r = tests.a_delete("/api/v1/teams/the-a-team")
     assert r.status_code == 200
-    r = tests.a_get("/api/v1/the-a-team")
+    r = tests.a_get("/api/v1/teams/the-a-team")
     assert r.status_code == 404
