@@ -14,7 +14,7 @@ class Membership(Base):
     """
     team_id     = db.Column(db.Integer, db.ForeignKey('team.id'))
     project_id  = db.Column(db.Integer, db.ForeignKey('project.id'))
-    user_id     = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id     = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     permission_level = db.Column(db.Integer)
 

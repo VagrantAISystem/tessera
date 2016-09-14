@@ -9,6 +9,8 @@ from werkzeug import check_password_hash, generate_password_hash
 
 class User(Base):
     """User represents a user of our application."""
+    __tablename__ = "users"
+
     full_name = db.Column(db.String(250), nullable=False)
     email     = db.Column(db.String(128),  nullable=False, unique=True)
     # TODO: Move this into memberships

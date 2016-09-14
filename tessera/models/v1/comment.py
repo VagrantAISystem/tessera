@@ -8,7 +8,7 @@ from sqlalchemy.orm import joinedload
 
 class Comment(Base):
     """A comment on a ticket"""
-    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     ticket_id = db.Column(db.Integer, db.ForeignKey('ticket.id'))
 
     body      = db.Column(db.Text())

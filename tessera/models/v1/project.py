@@ -11,7 +11,7 @@ class Project(Base):
     repo     = db.Column(db.String(250))
     homepage = db.Column(db.String(250))
 
-    project_lead_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    project_lead_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     team_id         = db.Column(db.Integer, db.ForeignKey('team.id'))
 
     tickets = db.relationship('Ticket', backref='project')
