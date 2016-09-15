@@ -88,3 +88,6 @@ ENV/
 # Rope project settings
 .ropeproject
 .tessera_secret_key
+
+# Ignore emacs autosave files
+.#*
