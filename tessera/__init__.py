@@ -14,15 +14,15 @@ app.config.from_object(config)
 fh = logging.FileHandler(config.LOG_FILE)
 app.logger.addHandler(fh)
 
-@app.before_request
-def time_request():
-    g.start  = datetime.now()
+# @app.before_request
+# def time_request():
+#     g.start  = datetime.now()
 
-@app.after_request
-def after_request(res):
-    diff = datetime.now() - g.start
-    app.logger.info("[%s] %d %s %d".format(request.method, res.status_code,
-                                           request.full_path, diff))
+# @app.after_request
+# def after_request(res):
+#     diff = datetime.now() - g.start
+#     app.logger.info("[%s] %d %s %d".format(request.method, res.status_code,
+#                                            request.full_path, diff))
 
 # Setup the application cache
 try:

@@ -26,15 +26,10 @@ def ticket_create(team_slug, pkey):
     return jsonify(tk.to_json())
 
 @v1.route("/tickets/<string:team_slug>/<string:pkey>/<string:ticket_key>", methods=["GET"])
-@auth_required
 def ticket_get(team_slug, pkey, ticket_key):
     prl = request.args.get("preload", "")
     tk = Ticket.get_by_key(team_slug, pkey, ticket_key, prl) 
     return jsonify( tk.to_json() )
-
-@v1.route("/tickets/<string:team_slug>/<string:pkey>/<string:ticket_key>", methods=["PUT"])
-def ticket_update(team_slug, pkey, ticket_key):
-    return jsonify(message="Not implemented")
 
 @v1.route("/tickets/<string:team_slug>/<string:pkey>/<string:ticket_key>", methods=["DELETE"])
 def ticket_delete(team_slug, pkey, ticket_key):
