@@ -24,7 +24,6 @@ def after_request(res):
     app.logger.info("[%s] %d %s %d".format(request.method, res.status_code,
                                            request.full_path, diff))
 
-
 # Setup the application cache
 try:
     cache = RedisCache(host=config.REDIS_HOST, port=config.REDIS_PORT, 
