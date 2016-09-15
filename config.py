@@ -2,12 +2,7 @@ import random
 import string
 import os
 
-DEBUG = True
-
-TESSERA_ENV = os.environ.get("TESSERA_ENV", "development")
-
-if TESSERA_ENV == "production":
-    DEBUG = False
+DEBUG = bool(os.environ.get("TESSERA_DEBUG", "False"))
 
 # Define the application directory
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
