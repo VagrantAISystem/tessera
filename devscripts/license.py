@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 
 stub = """
-
+#
 #
 #    Tessera, an Open Source Bug Tracking / Ticketing system.
 #    Mathew Robinson & Mark Chandler (c) 2016
@@ -21,18 +22,21 @@ stub = """
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-
+#
 """
 
 def update_licenses(directory):
-    for entry in os.listdir("./"):
-        if os.isfile(entry) and entry.endswith(".py"):
-            with open(entry, "r+") as f:
-                content = f.read()
-                f.seek(0, 0)
-                f.write(stub + content)
-        if os.isdir(entry):
-            update_licenses(entry)
+    for dirname, dirs, filenames in os.walk(directory):
+        for entry in filenames:
+            if entry.endswith(".py") and not entry.startswith("."):
+                with open(os.path.join(dirname, entry), "r+") as f:
+                    content = f.read()
+                    if stub not in content:
+                        f.seek(0, 0)
+                        f.write(stub + content)
 
 if __name__ == "__main__":
-    update_licenses("./")
+    dir = sys.argv[1]
+    if dir == "":
+        dir = "./"
+    update_licenses(dir)
