@@ -17,7 +17,7 @@ DEFAULT_DB_LOCATION = os.path.join(BASE_DIR, 'tessera.db')
 SQLALCHEMY_DATABASE_URI = os.environ.get("TESSERA_DB_URL", 
                                          'sqlite:///' + DEFAULT_DB_LOCATION)
 SQLALCHEMY_TRACK_MODIFICATIONS = False
-SQLALCHEMY_POOL_SIZE = 20
+SQLALCHEMY_POOL_SIZE = 10
 DATABASE_CONNECT_OPTIONS = {}
 
 SECRET_KEY_FILE = os.path.abspath(os.path.join(BASE_DIR, ".tessera_secret_key"))
