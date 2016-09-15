@@ -6,7 +6,5 @@ from os import environ
 from tessera import app
 from gevent.pywsgi import WSGIServer
 
-if config.TESSERA_ENV == "development":
+if __name== "__main__":
     app.run(host='0.0.0.0', port=8080, debug=config.DEBUG)
-
-flask_app = app
