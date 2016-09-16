@@ -1,4 +1,5 @@
 from tessera import db
+from tessera.lib import AppError
 from tessera.models.v1.project import Project
 from tessera.models.v1.team import Team
 from tessera.models.v1.user import User
