@@ -49,7 +49,7 @@ status_schema = {
     'properties': {
         'id': { 'type': 'integer' },
         'name': { 'type': 'string' },
-        'statusType': { 'type': 'integer' },
+        'statusType': { 'enum': [ 'TODO', 'IN_PROGRESS', 'DONE']},
     },
     'required': [ 'id', 'name', 'statusType' ],
 }
@@ -63,6 +63,9 @@ field_schema = {
     },
     'required': ['id', 'name', 'value']
 }
+
+field_array_schema = deepcopy(field_schema)
+field_array_schema["title"] = "Field"
 
 ticket_schema = {
     'type': 'object',
@@ -79,7 +82,7 @@ ticket_schema = {
         'status': status_schema,
         'fields': {
             'type': 'array',
-            'items': field_schema,
+            'items': field_array_schema,
         },
     },
     'required': [ 'summary', 'description', 'reporter' ],
