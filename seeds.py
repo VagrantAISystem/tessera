@@ -19,7 +19,12 @@ db.session.commit()
 
 a_team = Team(name="The A Team")
 a_team.team_lead = test
+
+b_team = Team(name="The B Team")
+b_team.team_lead = testadmin
+
 db.session.add(a_team)
+db.session.add(b_team)
 db.session.commit()
 
 # make the default statuses
@@ -45,9 +50,26 @@ db.session.commit()
 
 statuses = [ backlog, in_progress, on_hold, closed ]
 
+# Make default fields
+story_points    = Field(name="Story Points", data_type="INTEGER")
+estimated_hours = Field(name="Estimated Hours", data_type="INTEGER")
+logged_hours    = Field(name="Logged Hours", data_type="INTEGER")
+
+db.session.add(story_points)
+db.session.add(estimated_hours)
+db.session.add(logged_hours)
+db.session.commit()
+
+fields = [story_points, estimated_hours, logged_hours]
+
 testp = Project(pkey="TEST", name="Test Project")
 testp.project_lead = testadmin
+
+testp2 = Project(pkey="TEST2", name="Test Project 2")
+testp2.project_lead = test
+
 a_team.projects.append(testp)
+a_team.projects.append(testp2)
 
 s = 0
 for i in range(100):
@@ -65,6 +87,17 @@ for i in range(100):
         cmt = Comment(body="Hi I'm a comment. #" + str(i),
                       author=test)
         t.comments.append(cmt)
+
+    hours_estimated = FieldValue(field_id=estimated_hours.id,
+                                 integer_value=random.randint(0, 100))
+
+    hours_worked = FieldValue(field_id=logged_hours.id,
+                              integer_value=random.randint(0, 100))
+    points = FieldValue(field_id=story_points.id,
+                        integer_value=random.randint(0, 100))
+    ticket.fields.append(points)
+    ticket.fields.append(hours_worked)
+    ticket.fields.append(hours_estimated)
     testp.tickets.append(t)
 
 db.session.add(a_team)
