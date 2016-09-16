@@ -32,6 +32,7 @@ def ticket_get(team_slug, pkey, ticket_key):
     return jsonify( tk.to_json() )
 
 @v1.route("/tickets/<string:team_slug>/<string:pkey>/<string:ticket_key>", methods=["DELETE"])
+@auth_required
 def ticket_delete(team_slug, pkey, ticket_key):
     return jsonify(message="Not implemented")
 
@@ -43,7 +44,7 @@ def ticket_next(team_slug, pkey, ticket_key):
 def ticket_prev(team_slug, pkey, ticket_key):
     return jsonify(message="Not implemented")
 
-@v1.route("/tickets/<string:team_slug>/<string:pkey>/<string:ticket_key>/comments", methods=["GET"])
+@v1.route("/tickets/<string:team_slug>/<string:pkey>/<string:ticket_key>/comments", methods=["PUT"])
 @auth_required
 def ticket_update(team_slug, pkey, ticket_key):
     return jsonify(message="Not implemented")
