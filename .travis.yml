@@ -1,5 +1,18 @@
 language: python
 python:
-    - "3.4"
     - "3.5"
-script: pytest tests/
+
+script:
+  - pytest tests/
+
+after_success:
+  - python setup.py bdist
+
+deploy:
+  provider: releases
+  api_key: ""
+  file: "target/tessera-*tar.gz"
+  skip_cleanup: true
+  on:
+    tags: true
+    branch: master
