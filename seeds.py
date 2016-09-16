@@ -2,6 +2,8 @@ import sys
 from tessera import db
 from tessera.models.v1 import *
 
+db.create_all()
+
 testadmin = User(username="testadmin",
                  email="test@example.com",
                  password="test",
