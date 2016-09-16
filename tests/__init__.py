@@ -1,5 +1,4 @@
 import tessera
-import os
 import json
 import pytest
 
@@ -16,6 +15,7 @@ def test_json(jsn, schema):
         return True
     except Exception as e:
         print(e)
+        print(jsn)
         return False
 
 def t_post(route, payload):
