@@ -19,7 +19,7 @@ class Ticket(Base):
     project_id  = db.Column(db.Integer, db.ForeignKey('project.id'))
     status_id   = db.Column(db.Integer, db.ForeignKey('status.id'))
 
-    # fields      = db.relationship('FieldValue', backref='ticket')
+    fields      = db.relationship('FieldValue', backref='ticket')
     comments    = db.relationship('Comment', backref='ticket', lazy='dynamic')
 
     def __init__(self, *, ticket_key, summary, description, status="Open", assignee_id=None, reporter_id=None):
