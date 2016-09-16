@@ -21,7 +21,8 @@ project_field_schema = db.Table(
 
 class Field(Base):
     name      = db.Column(db.String(100), nullable=False)
-    data_type = db.Column(db.Enum(DataTypes), nullable=False)
+    data_type = db.Column(db.Enum("INTEGER", "FLOAT", "STRING", "TEXT",
+                                  name="data_types"), nullable=False)
 
 class FieldValue(Field):
     field_id      = db.Column('field_id', db.Integer,

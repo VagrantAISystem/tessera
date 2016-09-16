@@ -18,7 +18,8 @@ status_relationships = db.Table(
 
 class Status(Base):
     name          = db.Column(db.String(100), nullable=False)
-    status_type   = db.Column(db.Enum("TODO", "IN_PROGRESS", "DONE", name='status_types'))
+    status_type   = db.Column(db.Enum("TODO", "IN_PROGRESS", "DONE", name='status_types'),
+                              nullable=False)
     next_statuses = db.relationship('Status', 
                                     secondary=status_relationships,
                                     primaryjoin="Status.id == status_relationships.c.status_id",

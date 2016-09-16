@@ -1,18 +1,18 @@
 language: python
 python:
-    - "3.5"
-
+- '3.5'
 script:
-  - pytest tests/
-
+- pytest tests/
 after_success:
-  - python setup.py bdist
-
+- python setup.py bdist
 deploy:
   provider: releases
-  api_key: ""
-  file: "target/tessera-*tar.gz"
+  api_key: ''
+  file: target/tessera-*tar.gz
   skip_cleanup: true
   on:
     tags: true
     branch: master
+notifications:
+  slack:
+    secure: qI/9b9i91fOHbEUzbJxoZwnmVm/k5dOUojGJseH7lIdHZQ2fIT2J80LrUz5PRoajnPqf1THZa3pdtFhUSaVzYwHCnvSt42DSs5H4u/OHwXY8L9LqUjxS9aC2V00jS/NfsEfg0t6/NmenvpCaImz5WZnEbbt/9u6vYEqDLyQiB5JvW/k2vrLsjdla3p53i4WO/SFm+cWdDFWa8uk1+4Txcd8ufSxO39sejkXN20ys1OcHXUgZjD0x89aMCCJvvxufVPXPUN4j2SvpdLPMO0aCFTtoqX04V9rh6ZO6oTl7vXz3nQWND5oM+DCz3V7mBB4vEmkPXY/DhJIksIt1PpnZupY5UY3ozxhGRquUAznXSZWDLXZfP+zRojs6dVDEs4AYrlTABuZusgpSMnlO7HN4JUzeBfArY7QsD8iAoh8aNHR/Bjvz6D83TP+T+Fs9mjA8wrilznHGLBpaJJgBiablUyKykahAsMfuKi27jg1qREWxR//MPkBNCY28sBotO0obWoYVEml1o5ctC+dtlLlg5CB4rnZjcN/f/O/cGuyyVaaxiPSyWJBfKI6vGd3DE/ioPhf7ZQi/fmAgdNnQNaex8kuJ52FnEXoRog9r+2j4xLInvn7gsuAqWtbvSqLxZerhkOc0FoMDmK9NhqpvpGzumk8TBKQUp4Q7mwbWwEUuakg=
