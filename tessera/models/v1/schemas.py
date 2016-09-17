@@ -18,7 +18,7 @@ user_signup_schema['required'] += ['fullName', 'email', 'password']
 
 team_schema = {
     'type': 'object',
-    'properties': {  
+    'properties': {
         'id': { 'type': 'integer' },
         'name': { 'type': 'string' },
         'icon': { 'type': 'string' },
@@ -32,7 +32,7 @@ team_create_schema['required'] += ['teamLead']
 
 project_schema = {
     'type': 'object',
-    'properties': {  
+    'properties': {
         'id': { 'type': 'integer' },
         'name': { 'type': 'string' },
         'pkey': { 'type': 'string' },
@@ -59,13 +59,19 @@ field_schema = {
     'properties': {
         'id': { 'type': 'integer' },
         'name': { 'type': 'string' },
-        'value': { 'type': ['string', 'integer', 'float'] },
+        'value': {
+            'oneOf': [
+                {
+                    "type": "string",
+                },
+                {
+                    "type": "number",
+                }
+                ]
+        },
     },
     'required': ['id', 'name', 'value']
 }
-
-field_array_schema = deepcopy(field_schema)
-field_array_schema["title"] = "Field"
 
 ticket_schema = {
     'type': 'object',
@@ -82,7 +88,7 @@ ticket_schema = {
         'status': status_schema,
         'fields': {
             'type': 'array',
-            'items': field_array_schema,
+            'items': field_schema,
         },
     },
     'required': [ 'summary', 'description', 'reporter' ],
@@ -93,7 +99,7 @@ ticket_test_schema['required'] += ['assignee', 'ticketKey']
 
 comment_schema = {
     'type': 'object',
-    'properties': {  
+    'properties': {
         'id': { 'type': 'integer' },
         'body': { 'type': 'string' },
         'author': user_schema,
