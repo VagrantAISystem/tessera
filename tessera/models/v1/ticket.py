@@ -49,11 +49,11 @@ class Ticket(Base):
         return tk
 
     def from_json(prjct, json):
-        validate(json, ticket_schema) 
+        validate(json, ticket_schema)
         r = User.get_by_username_or_id(json.get("reporter", {}).get("username", ""))
         a = User.get_by_username_or_id(json.get("assignee", {}).get("username", ""))
         t = Ticket(summary=json['summary'],
-                   description=json['description'], 
+                   description=json['description'],
                    ticket_key=prjct.pkey + "-" + str(len(prjct.tickets) + 1),
                    reporter_id=r.id,
                    project_id=prjct.id)
