@@ -4,7 +4,6 @@ user_schema = {
     'type': 'object',
     'properties': {
         'id': { 'type': 'integer' },
-        'password': { 'type': 'string' },
         'username': { 'type': 'string' },
         'email': { 'type': 'string', 'format': 'email' },
         'fullName': { 'type': 'string' },
@@ -14,6 +13,7 @@ user_schema = {
 }
 
 user_signup_schema = deepcopy(user_schema)
+user_signup_schema['properties']['password'] = { 'type': 'string' }
 user_signup_schema['required'] += ['fullName', 'email', 'password']
 
 team_schema = {
@@ -21,14 +21,12 @@ team_schema = {
     'properties': {
         'id': { 'type': 'integer' },
         'name': { 'type': 'string' },
+        'description': { 'type': 'string' },
         'icon': { 'type': 'string' },
         'teamLead': user_schema,
     },
-    'required': [ 'name' ],
+    'required': [ 'name', 'teamLead' ],
 }
-
-team_create_schema = deepcopy(team_schema)
-team_create_schema['required'] += ['teamLead']
 
 project_schema = {
     'type': 'object',
@@ -105,4 +103,17 @@ comment_schema = {
         'author': user_schema,
     },
     'required': [ 'body', 'author' ],
+}
+
+role_schema = {
+    'type': 'object',
+    'properties': {
+        'id': { 'type': 'integer' },
+        'name': { 'type': 'string' },
+        'members': {
+            'type': 'array',
+            'items': user_schema,
+        },
+    },
+    'required': [ 'id', 'name' ],
 }

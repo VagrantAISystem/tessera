@@ -45,13 +45,9 @@ class User(Base):
         self.set_password(password)
 
     def get_by_username_or_id(param):
-        try:
-            i = int(param)
-            u = User.query.filter(User.id == i).first()
-        except:
-            u = User.query.filter_by(username=param).first()
-        if u == None:
-            raise AppError(status_code=404, message='User not found.')
+        u = User.query.\
+                filter(User.username == param or User.id == param).\
+                first()
         return u
 
     def from_json(json):
@@ -63,7 +59,6 @@ class User(Base):
         return u
 
     def to_json(self):
-        """Extends base class to_json to drop password as well."""
         return super().to_json(ignoreFields=["password", "is_admin", "created_at", "updated_at"])
 
     def update(self, json):
