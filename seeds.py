@@ -1,4 +1,4 @@
-import sys
+import random
 from tessera import db
 from tessera.models.v1 import *
 
@@ -54,13 +54,19 @@ statuses = [ backlog, in_progress, on_hold, closed ]
 story_points    = Field(name="Story Points", data_type="INTEGER")
 estimated_hours = Field(name="Estimated Hours", data_type="INTEGER")
 logged_hours    = Field(name="Logged Hours", data_type="INTEGER")
+test_field1     = Field(name="Test String Field", data_type="STRING")
+test_field2     = Field(name="Test Text Field", data_type="TEXT")
+test_field3     = Field(name="Test Integer Field", data_type="INTEGER")
+test_field4     = Field(name="Test Float Field", data_type="FLOAT")
 
 db.session.add(story_points)
 db.session.add(estimated_hours)
 db.session.add(logged_hours)
+db.session.add(test_field1)
+db.session.add(test_field2)
+db.session.add(test_field3)
+db.session.add(test_field4)
 db.session.commit()
-
-fields = [story_points, estimated_hours, logged_hours]
 
 testp = Project(pkey="TEST", name="Test Project")
 testp.project_lead = testadmin
@@ -95,9 +101,9 @@ for i in range(100):
                               integer_value=random.randint(0, 100))
     points = FieldValue(field_id=story_points.id,
                         integer_value=random.randint(0, 100))
-    ticket.fields.append(points)
-    ticket.fields.append(hours_worked)
-    ticket.fields.append(hours_estimated)
+    t.fields.append(points)
+    t.fields.append(hours_worked)
+    t.fields.append(hours_estimated)
     testp.tickets.append(t)
 
 db.session.add(a_team)

@@ -1,7 +1,8 @@
 from tessera import db
-from tessera.models.v1.base import Base
 from sqlalchemy.orm import joinedload
+from tessera.models.v1.base import Base
 from tessera.models.v1.team import Team
+from tessera.models.v1.schemas import project_schema
 
 
 class Project(Base):
@@ -23,15 +24,30 @@ class Project(Base):
         self.repo     = repo
         self.homepage = homepage
 
-    def get_by_key(team_slug, pkey, preload=False):
+    def get_by_id(i, preload=''):
+       p = Project.query.\
+                options(joinedload(Project.project_lead)).\
+                filter(Project.id == i).\
+                first()
+       return p
+
+    def get_by_key(team_slug, pkey, preload=''):
         p = Project.query.\
                 options(joinedload(Project.project_lead)).\
                 join(Project.team).\
                 filter(Team.url_slug == team_slug).\
                 filter(Project.pkey == pkey).\
                 first()
-        if p == None:
-            raise AppError(status_code=404, message="Project not found.")
+        return p
+
+    def from_json(team_slug, jsn):
+        validate(jsn, project_schema)
+        t = Team.get_by_slug(team_slug)
+        p = Project(pkey=jsn["pkey"],
+                    name=jsn["name"],
+                    homepage=jsn.get("homepage", ""),
+                    repo=jsn.get("repo", ""))
+        p.team = t
         return p
 
     def to_json(self):
