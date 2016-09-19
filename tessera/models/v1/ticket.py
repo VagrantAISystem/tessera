@@ -10,6 +10,8 @@ from jsonschema import validate
 
 class Ticket(Base):
     """A ticket is a unit of work for a project, be it a bug or support ticket."""
+    __tablename__ = "tables"
+
     ticket_key  = db.Column(db.String(100), nullable=False, unique=True) # I mean jesus christ how many digits
     summary     = db.Column(db.String(250), nullable=False)
     description = db.Column(db.Text())
@@ -21,13 +23,6 @@ class Ticket(Base):
 
     fields      = db.relationship('FieldValue', backref='ticket')
     comments    = db.relationship('Comment', backref='ticket', lazy='dynamic')
-
-    def __init__(self, *, ticket_key, summary, description, assignee_id=None, reporter_id=None):
-        self.ticket_key  = ticket_key
-        self.summary     = summary
-        self.description = description
-        self.assignee_id = assignee_id
-        self.reporter_id = reporter_id
 
     def get_by_id(i, preload=''):
         tk = Ticket.query.\
@@ -57,6 +52,17 @@ class Ticket(Base):
         r = User.get_by_username_or_id(json.get("reporter", {}).get("username", ""))
         a = User.get_by_username_or_id(json.get("assignee", {}).get("username", ""))
         tk = Ticket(summary=json['summary'],
+                    description=json['description'])
+        tk.assignee_id = a.id
+        tk.reporter_id = r.id
+        tk.project_id  = prjct.id
+        return tk
+
+    def from_json(prjct, json):
+        validate(json, ticket_schema)
+        r = User.get_by_username_or_id(json.get("reporter", {}).get("username", ""))
+        a = User.get_by_username_or_id(json.get("assignee", {}).get("username", ""))
+        t = Ticket(summary=json['summary'],
                    description=json['description'],
                    ticket_key=prjct.pkey + "-" + str(len(prjct.tickets) + 1),
                    reporter_id=r.id,
