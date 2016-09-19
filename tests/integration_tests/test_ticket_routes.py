@@ -1,10 +1,6 @@
 import tests
-import json
-import pytest
-from tessera.models.v1.schemas import ticket_test_schema
 
-@pytest.mark.usefixtures("db")
-class TestTicketRoutes:
+class TestTicketRoutes():
     # Create
     def test_ticket_create(self):
         r = tests.t_post("/api/v1/tickets/the-a-team/TEST/tickets",
@@ -28,15 +24,12 @@ class TestTicketRoutes:
                                  "fullName": "Test Testerson",
                              },
                          })
-        jsn = json.loads(r.data.decode("utf-8"))
-        jsn["fields"] = [{"id": 0, "name": "test", "value": "TEST"}]
-        assert tests.test_json(jsn, ticket_test_schema)
+        assert r.status_code == 200
 
     # Read
     def test_ticket_get(self):
         r = tests.a_get("/api/v1/tickets/the-a-team/TEST/TEST-1")
-        jsn = json.loads(r.data.decode("utf-8"))
-        assert tests.test_json(jsn, ticket_test_schema)
+        assert r.status_code == 200
 
     # Update
     def test_ticket_update(self):
@@ -57,20 +50,13 @@ class TestTicketRoutes:
                                 "username": "testadmin",
                             },
                         })
-        jsn = json.loads(r.data.decode("utf-8"))
-        assert jsn == {
-            "summary": "This is not a unit test ticket.",
-            "description": "I hope this unit test passes.",
-            "reporter": {
-                "username": "testadmin",
-            },
-        }
+        assert r.status_code == 200
 
     # Delete
     def test_ticket_delete(self):
-        r = tests.t_delete("/api/v1/tickets/the-a-team/TEST/TEST-2")
+        r = tests.t_delete("/api/v1/tickets/the-a-team/TEST/TEST-10")
         assert r.status_code == 401
-        r = tests.a_delete("/api/v1/tickets/the-a-team/TEST/TEST-2")
+        r = tests.a_delete("/api/v1/tickets/the-a-team/TEST/TEST-10")
         assert r.status_code == 200
-        r = tests.a_get("/api/v1/tickets/the-a-team/TEST/TEST-1")
+        r = tests.a_get("/api/v1/tickets/the-a-team/TEST/TEST-10")
         assert r.status_code == 404

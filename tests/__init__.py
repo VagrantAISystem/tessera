@@ -46,7 +46,7 @@ def t_delete(route):
 
 def a_post(route, payload, admin=False):
     """Tests a post request with auth"""
-    token = get_token(admin) 
+    token = get_token(admin)
     with tessera.app.test_client() as client:
         response = client.post(route, data=json.dumps(payload),
                                content_type="application/json",
@@ -55,14 +55,14 @@ def a_post(route, payload, admin=False):
 
 def a_get(route, admin=False):
     """Tests a get request with auth"""
-    token = get_token(admin)    
+    token = get_token(admin)
     with tessera.app.test_client() as client:
         response = client.get(route, headers={ "Authorization": token })
     return response
 
 def a_put(route, payload, admin=False):
     """Tests a put request with auth"""
-    token = get_token(admin)    
+    token = get_token(admin)
     with tessera.app.test_client() as client:
         response = client.put(route, data=json.dumps(payload),
                               content_type="application/json",
@@ -71,9 +71,7 @@ def a_put(route, payload, admin=False):
 
 def a_delete(route, admin=False):
     """Tests a delete request with auth"""
-    token = get_token(admin)    
+    token = get_token(admin)
     with tessera.app.test_client() as client:
         response = client.delete(route, headers={ "Authorization": token })
     return response
-
-

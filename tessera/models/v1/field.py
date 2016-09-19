@@ -12,7 +12,7 @@ class DataTypes(enum.Enum):
 
 project_field_schema = db.Table(
     'project_field_schema',
-    db.Column('field_id', db.Integer, db.ForeignKey('field.id'), 
+    db.Column('field_id', db.Integer, db.ForeignKey('field.id'),
               nullable=False),
     db.Column('project_id', db.Integer, db.ForeignKey('project.id'),
               nullable=False),
@@ -24,15 +24,15 @@ class Field(Base):
     data_type = db.Column(db.Enum("INTEGER", "FLOAT", "STRING", "TEXT",
                                   name="data_types"), nullable=False)
 
-class FieldValue(Field):
+class FieldValue(Base):
     field_id      = db.Column('field_id', db.Integer,
                               db.ForeignKey('field.id'), nullable=False)
     ticket_id     = db.Column('ticket_id', db.Integer,
                               db.ForeignKey('ticket.id'), nullable=False)
-    text_value    = db.Column('text_value', db.Text())
-    string_value  = db.Column('string_value', db.String(250))
-    float_value   = db.Column('float_value', db.Float)
-    integer_value = db.Column('integer_value', db.Integer)
+    text_value    = db.Column(db.Text())
+    string_value  = db.Column(db.String(250))
+    float_value   = db.Column(db.Float)
+    integer_value = db.Column(db.Integer)
 
     def validate_value(self):
         if (
@@ -54,14 +54,14 @@ class FieldValue(Field):
         elif self.field.data_type == DataTypes.STRING:
             self.string_value = self.value
         else:
-            raise AppError(status_code=500, 
+            raise AppError(status_code=500,
                            message='Uknown error setting field value')
 
     def from_json(jsn):
         parent_field = Field.query.filter_by(name=jsn.get("name", ""))
         if parent_field == None:
             raise AppError(status_code=404, message="No field with that name")
-        fv = FieldValue(name=jsn.get("name"), 
+        fv = FieldValue(name=jsn.get("name"),
                         value=jsn.get("value"))
         fv.set_value()
         return fv
