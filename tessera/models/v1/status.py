@@ -13,9 +13,3 @@ class Status(Base):
 
     def to_json(self):
         return super().to_json(ignoreFields=["created_at", "updated_at"])
-
-    def get_next(self):
-        return self.next_statuses.all()
-
-    def get_previous(self):
-        return self.previous_statuses.all()
