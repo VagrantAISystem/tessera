@@ -18,7 +18,7 @@ user_signup_schema['required'] += ['fullName', 'email', 'password']
 
 team_schema = {
     'type': 'object',
-    'properties': {  
+    'properties': {
         'id': { 'type': 'integer' },
         'name': { 'type': 'string' },
         'icon': { 'type': 'string' },
@@ -32,7 +32,7 @@ team_create_schema['required'] += ['teamLead']
 
 project_schema = {
     'type': 'object',
-    'properties': {  
+    'properties': {
         'id': { 'type': 'integer' },
         'name': { 'type': 'string' },
         'pkey': { 'type': 'string' },
@@ -90,7 +90,7 @@ ticket_test_schema['required'] += ['assignee', 'ticketKey']
 
 comment_schema = {
     'type': 'object',
-    'properties': {  
+    'properties': {
         'id': { 'type': 'integer' },
         'body': { 'type': 'string' },
         'author': user_schema,
