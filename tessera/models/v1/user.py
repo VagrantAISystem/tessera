@@ -37,13 +37,6 @@ class User(Base):
     teams    = association_proxy('membership', 'team')
     projects = association_proxy('membership', 'project')
 
-    def __init__(self, *, username, email, password, full_name, is_admin=False):
-        self.full_name = full_name
-        self.username  = username
-        self.email     = email
-        self.is_admin  = is_admin
-        self.set_password(password)
-
     def get_by_username_or_id(param):
         try:
             i = int(param)

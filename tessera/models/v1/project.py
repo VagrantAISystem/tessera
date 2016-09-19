@@ -6,6 +6,8 @@ from tessera.models.v1.team import Team
 
 class Project(Base):
     """Project is a container for tickets."""
+    __tablename__ = "projects"
+
     pkey     = db.Column(db.String(6), nullable=False, unique=True)
     name     = db.Column(db.String(250), nullable=False)
     repo     = db.Column(db.String(250))
