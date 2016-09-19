@@ -20,7 +20,6 @@ class Workflow(Base):
     __tablename__ = "workflows"
 
     name = db.Column(db.String(100), nullable=False)
-
     statuses = db.relationship('WorkflowStatuses',
                                backref="workflow")
 
@@ -37,3 +36,10 @@ class WorkflowStatuses(db.Model):
                                     secondaryjoin="Status.id == status_relationships.c.next_status_id",
                                     backref='previous_statuses',
                                     lazy='dynamic')
+    tickets = db.relationship('Ticket', backref='status', lazy='dynamic')
+
+    def get_next(self):
+        return self.next_statuses.all()
+
+    def get_previous(self):
+        return self.previous_statuses.all()
