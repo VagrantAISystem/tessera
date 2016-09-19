@@ -8,18 +8,24 @@ from tessera.models.v1.schemas import ticket_schema
 from sqlalchemy.orm import joinedload
 from jsonschema import validate
 
+class TicketType(Base):
+    __tablename__ = "ticket_types"
+
+    name = db.Column(db.String(250), nullable=False, unique=True)
+
 class Ticket(Base):
     """A ticket is a unit of work for a project, be it a bug or support ticket."""
-    __tablename__ = "tables"
+    __tablename__ = "tickets"
 
-    ticket_key  = db.Column(db.String(100), nullable=False, unique=True) # I mean jesus christ how many digits
+    ticket_key  = db.Column(db.String(100), nullable=False, unique=True)
     summary     = db.Column(db.String(250), nullable=False)
     description = db.Column(db.Text())
 
-    assignee_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    reporter_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    project_id  = db.Column(db.Integer, db.ForeignKey('project.id'))
-    status_id   = db.Column(db.Integer, db.ForeignKey('status.id'))
+    assignee_id    = db.Column(db.Integer, db.ForeignKey('users.id'))
+    reporter_id    = db.Column(db.Integer, db.ForeignKey('users.id'))
+    project_id     = db.Column(db.Integer, db.ForeignKey('projects.id'))
+    status_id      = db.Column(db.Integer, db.ForeignKey('status.id'))
+    ticket_type_id = db.Column(db.Integer, db.ForeignKey('issue_types.id'))
 
     fields      = db.relationship('FieldValue', backref='ticket')
     comments    = db.relationship('Comment', backref='ticket', lazy='dynamic')
