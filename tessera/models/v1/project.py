@@ -3,14 +3,7 @@ from sqlalchemy.orm import joinedload
 from tessera.models.v1.base import Base
 from tessera.models.v1.team import Team
 from tessera.models.v1.schemas import project_schema
-
-project_ticket_type_workflows = db.Table(
-    "project_ticket_type_workflows",
-    db.Column("workflow_id", db.ForeignKey("workflows.id"), nullable=False),
-    db.Column("project_id", db.ForeignKey("projects.id"), nullable=False),
-    db.Column("ticket_type_id", db.ForeignKey("ticket_types.id")),
-    db.PrimaryKeyConstraint("workflow_id", "project_id")
-)
+from tessera.movels.v1.relationship import project_ticket_type_workflows
 
 class Project(Base):
     """Project is a container for tickets."""
@@ -31,8 +24,9 @@ class Project(Base):
                                 secondary=project_ticket_type_workflows,
                                 primaryjoin="Project.id == project_ticket_type_workflows.project_id",
                                 secondaryjoin="Workflow.id == project_ticket_type_workflows.workflow_id",
-                                backref='project',
+                                backref='projects',
                                 lazy="dynamic")
+    
     def get_by_id(i, preload=''):
        p = Project.query.\
                 options(joinedload(Project.project_lead)).\

@@ -3,21 +3,13 @@ import enum
 from tessera import db
 from tessera.lib import AppError
 from tessera.models.v1.base import Base
+from tessera.models.v1.relationships import project_field_schema
 
 class DataTypes(enum.Enum):
     INTEGER = "INTEGER"
     FLOAT = "FLOAT"
     STRING = "STRING"
     TEXT = "TEXT"
-
-project_field_schema = db.Table(
-    'project_field_schema',
-    db.Column('field_id', db.Integer, db.ForeignKey('field.id'),
-              nullable=False),
-    db.Column('project_id', db.Integer, db.ForeignKey('project.id'),
-              nullable=False),
-    db.PrimaryKeyConstraint('field_id', 'project_id')
-)
 
 class Field(Base):
     __tablename__ = "fields"
