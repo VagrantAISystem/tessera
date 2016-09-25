@@ -33,7 +33,6 @@ class Project(Base):
                                 secondaryjoin="Workflow.id == project_ticket_type_workflows.workflow_id",
                                 backref='project',
                                 lazy="dynamic")
-
     def get_by_id(i, preload=''):
        p = Project.query.\
                 options(joinedload(Project.project_lead)).\
