@@ -3,7 +3,7 @@ from sqlalchemy.orm import joinedload
 from tessera.models.v1.base import Base
 from tessera.models.v1.team import Team
 from tessera.models.v1.schemas import project_schema
-from tessera.movels.v1.relationship import project_ticket_type_workflows
+from tessera.movels.v1.relationship import project_workflow_schemas
 
 class Project(Base):
     """Project is a container for tickets."""
