@@ -3,8 +3,8 @@ from tessera import db
 # This table shows us our workflow, we query our next statuses by getting all
 # rows with a given status_id and then we can find our previous statuses by
 # getting all the rows with next_status_id = our id.
-status_relationships = db.Table(
-    'workflow_status_relationships',
+workflow_transitions = db.Table(
+    'workflow_transitions',
     db.Column('workflow_status_id', db.Integer,
               db.ForeignKey('workflow_statuses.id'), nullable=False),
     db.Column('status_id', db.Integer,
@@ -15,8 +15,8 @@ status_relationships = db.Table(
 )
 
 # This assigns workflows to issue types per project
-project_ticket_type_workflows = db.Table(
-    "project_ticket_type_workflows",
+project_workflow_schemas = db.Table(
+    "project_workflow_schemas",
     db.Column("workflow_id", db.ForeignKey("workflows.id"), nullable=False),
     db.Column("project_id", db.ForeignKey("projects.id"), nullable=False),
     db.Column("ticket_type_id", db.ForeignKey("ticket_types.id")),
