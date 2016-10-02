@@ -1,0 +1,34 @@
+version: '2'
+services:
+  postgres:
+    image: postgres
+    environment:
+      # This is ok since it's not available from the outside.
+      # Feel free to adjust to taste.
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=tessera
+  redis:
+    image: redis
+  rabbit:
+    image: rabbitmq
+  celery:
+    image: celery
+    depends_on:
+      - rabbit
+  tessera:
+    build: .
+    volumes:
+      - .:/tessera
+    working_dir: /tessera
+    command: ./run.sh
+    environment:
+      - TESSERA_DB_URL=postgres://postgres:postgres@postgres:5432/tessera
+      - TESSERA_REDIS_HOST=redis
+      # Remove this for production
+      - TESSERA_DEBUG=true
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - redis
+      - celery

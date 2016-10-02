@@ -17,15 +17,9 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 if "postgres" in SQLALCHEMY_DATABASE_URI:
     SQLALCHEMY_POOL_SIZE = 10
 
-SECRET_KEY_FILE = os.path.abspath(os.path.join(BASE_DIR, ".tessera_secret_key"))
-if os.path.isfile(SECRET_KEY_FILE):
-    with open(SECRET_KEY_FILE) as skf:
-        SECRET_KEY = skf.read()
-else:
-    SECRET_KEY = ''.join(random.SystemRandom().choice(string.ascii_uppercase +
+
+SECRET_KEY = ''.join(random.SystemRandom().choice(string.ascii_uppercase +
                                          string.digits) for _ in range(32))
-    with open(SECRET_KEY_FILE, "w") as skf:
-        skf.write(SECRET_KEY)
 
 LOG_FILE = os.path.abspath(os.path.join(BASE_DIR, "logs", "tessera.log"))
 if not os.path.isdir(os.path.abspath(os.path.join(BASE_DIR, "logs"))):

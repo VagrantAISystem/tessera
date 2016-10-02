@@ -3,7 +3,7 @@ from sqlalchemy import or_
 from sqlalchemy.orm import joinedload
 from jsonschema import validate
 from tessera.models.v1.base import Base
-from tessera.models.v1.schemas import team_create_schema
+from tessera.models.v1.schemas import team_schema
 
 class Team(Base):
     """Team is a container for projects.
