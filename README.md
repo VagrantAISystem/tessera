@@ -20,6 +20,8 @@ very important piece of running an Open Source project.
 
 ## Contributing
 
+The basics:
+
 1. Fork it! :fork_and_knife:
 2. Create an issue describing what you're working on.
 3. Create your feature branch: `git checkout -b my-new-feature`
@@ -31,6 +33,10 @@ All pull requests should go to the develop branch not master. Thanks!
 
 We follow the Contributor Covenant code of conduct, you can find it 
 [here](https://github.com/chasinglogic/tessera/blob/master/code_of_conduct.md)
+
+Need help getting started hacking on Tessera? No problem we have a
+[CONTRIBUTING.md](https://github.com/chasignlogic/tessera/blob/develop/CONTRIBUTING.md) 
+just for that!
 
 ## License
 
@@ -56,4 +62,20 @@ Tessera is distributed under the AGPLv3
 
 ## Installation
 
-Currently Tessera is pre-alpha software at best, if you want to try it out
+Currently Tessera is pre-alpha software at best, if you want to try it out you
+can simply clone this repo down and run `docker-compose up`. That will get you
+going albeit with no persistent storage. Alternavitely if you have the
+following software installed and configured you can run Tessera using gunicorn:
+
+1. Redis
+2. RabbitMQ
+3. Postgres
+4. Celery
+
+You can then run tessera using the command:
+`gunicorn --config gunicorn.conf tessera:app`
+
+## Configuration
+
+I will write configuration documentation when Tessera has stabilized a bit, for
+now you can use the config.py file as a reference.
