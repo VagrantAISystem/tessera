@@ -35,7 +35,7 @@ We follow the Contributor Covenant code of conduct, you can find it
 [here](https://github.com/chasinglogic/tessera/blob/master/code_of_conduct.md)
 
 Need help getting started hacking on Tessera? No problem we have a
-[CONTRIBUTING.md](https://github.com/chasignlogic/tessera/blob/develop/CONTRIBUTING.md) 
+[CONTRIBUTING.md](https://github.com/chasinglogic/tessera/blob/develop/CONTRIBUTING.md) 
 just for that!
 
 ## License
