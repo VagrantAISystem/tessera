@@ -1,6 +1,7 @@
 import logging
 
 from flask import Flask, jsonify, g, request
+from celery import Celery
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.contrib.cache import RedisCache
 from datetime import datetime
@@ -9,6 +10,17 @@ import config
 
 app = Flask(__name__)
 app.config.from_object(config)
+
+celery = Celery(app.import_name)
+TaskBase = celery.Task
+
+class ContextTask(TaskBase):
+    abstract = True
+    def __call__(self, *args, **kwargs):
+        with app.app_context():
+            return TaskBase.__call__(self, *args, **kwargs)
+
+celery.Task = ContextTask
 
 # Setup the log file.
 fh = logging.FileHandler(config.LOG_FILE)
@@ -25,17 +37,8 @@ app.logger.addHandler(fh)
 #                                            request.full_path, diff))
 
 # Setup the application cache
-try:
-    cache = RedisCache(host=config.REDIS_HOST, port=config.REDIS_PORT, 
-                       password=None,db=0, default_timeout=300, key_prefix=None)
-except Exception as e:
-    # If redis isn't set up default to a simple in memory cache.
-    # This is bad for performance but makes testing and development a little
-    # easier
-    app.logger.warning("Falling back to in memory cache this is not recommended. Please setup a redis DB.")
-    app.logger.warning(str(e))
-    from werkzeug.contrib.cache import SimpleCache
-    cache = SimpleCache()
+cache = RedisCache(host=config.REDIS_HOST, port=config.REDIS_PORT, 
+                   password=None,db=0, default_timeout=300, key_prefix=None)
 
 # Create the database
 db = SQLAlchemy(app)
